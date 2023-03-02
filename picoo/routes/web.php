@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PictureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,10 +13,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth'],function() {
+    Route::get('/', [PictureController::class, 'index']);
+    Route::post('/', [PictureController::class, 'postPicture']);
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

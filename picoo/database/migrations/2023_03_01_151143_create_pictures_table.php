@@ -19,11 +19,11 @@ class CreatePicturesTable extends Migration
             $table->string('file_path');
             $table->string('title');
             $table->tinyInteger('tag_count');
-            $table->string('post_comment');
+            $table->string('post_comment',400);
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -15,7 +15,7 @@
         
         <form action="/pictures?name={{$name}}" method="get" class="">
             <input type="text" name="content" placeholder="タグ名検索"  />
-            <button @click="searchTag">検索</button>
+            <input class="btn" type="submit" value="検索">
         </form>
 
         <button class="btn-mypage btn" >
@@ -41,7 +41,7 @@
                 <li class="header-link">
                     <form action="/logout" method="post" class="form-logout">
                     @csrf
-                    <input class="btn-logout" type="submit" value="ログアウト">
+                    <input class="btn btn-logout" type="submit" value="ログアウト">
                     </form>
                 </li>
                 
@@ -66,5 +66,5 @@
 </html>
 
 <script>
-    
+
 </script>

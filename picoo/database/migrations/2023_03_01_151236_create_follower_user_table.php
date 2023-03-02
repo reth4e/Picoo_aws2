@@ -19,8 +19,8 @@ class CreateFollowerUserTable extends Migration
             $table->timestamp('now_last_uploaded')->nullable();
             $table->timestamp('pre_last_uploaded')->nullable();
 
-            $table->foreign('follower_id')->references('id')->on('users');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('follower_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
