@@ -16,7 +16,7 @@ class CreateNotificationTable extends Migration
         Schema::create('notification', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->timestamp('created_at')->useCurrent()->nullable();
+            
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

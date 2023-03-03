@@ -17,9 +17,9 @@ class CreatePicturesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('file_path');
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->tinyInteger('tag_count');
-            $table->string('post_comment',400);
+            $table->string('post_comment',400)->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
 
