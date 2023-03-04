@@ -12,10 +12,15 @@ use App\Http\Requests\PictureRequest;
 
 class PictureController extends Controller
 {
+
     public function index(){
         $user = Auth::User();
+        $param = [
+            'user' => $user,
+            'tags' => NULL,
+        ];
 
-        return view('index',$user);
+        return view('index',$param);
     }
 
     public function postPicture(PictureRequest $request)
@@ -36,6 +41,7 @@ class PictureController extends Controller
 
         $input_tag = $request->tags;
         $input_tag = str_replace('　', ' ', $input_tag);
+        //複数の半角スペースを単一の半角スペースにする
         $input_tag = preg_replace('/\s+/', ' ', $input_tag);
 
         $tag_ids = [];
@@ -65,6 +71,50 @@ class PictureController extends Controller
 
         $picture->tags()->syncWithoutDetaching($tag_ids);
 
-        return view('index',$user);
+        $param = [
+            'user' => $user,
+            'tags' => NULL
+        ];
+        return view('index',$param);
+    }
+
+
+    public function searchPictures(Request $request) {
+        $user = Auth::user();
+
+        $searched_tag = $request->contents;
+        $searched_tag = str_replace('　', ' ', $searched_tag);
+        //複数の半角スペースを単一の半角スペースにする
+        $searched_tag = preg_replace('/\s+/', ' ', $searched_tag);
+        $searched_tag_array = explode(' ', $searched_tag);
+        
+
+        $pictures = Picture::all();
+        $picture_ids = [];
+        foreach($pictures as $picture) {
+            $duplicates = 0;
+            $tags = $picture->tags;
+            foreach($searched_tag_array as $value) {
+                foreach($tags as $tag) {
+                    if(strpos($tag,(string)$value) !== false) {
+                        $duplicates++;
+                        continue 2;
+                    }
+                }
+            }
+            //検索ワードの文字数が特定の1文字(a,e,rなど)のときに検索不具合　次回以降の課題
+            if($duplicates === count($searched_tag_array)) {
+                array_push($picture_ids,$picture->id);
+            }
+        }
+
+        $search_result = Picture::whereIn('id',$picture_ids)->paginate(20);
+        
+        $param = [
+            'user' => $user,
+            'pictures' => $search_result,
+            'tags' => $searched_tag,
+        ];
+        return view('pictures',$param);
     }
 }

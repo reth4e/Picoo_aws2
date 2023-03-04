@@ -13,8 +13,8 @@
     <header>
         <p class="header-logo">Picoo</p>
         
-        <form action="/pictures?name={{$name}}" method="get" class="">
-            <input type="text" name="content" placeholder="タグ名検索"  />
+        <form action="/pictures?name={{$tags}}" method="get" class="">
+            <input type="text" name="contents" placeholder="タグ名検索"  />
             <input class="btn" type="submit" value="検索">
         </form>
 

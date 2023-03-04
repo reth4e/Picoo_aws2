@@ -18,6 +18,8 @@ Route::group(['middleware' => 'auth'],function() {
     Route::post('/', [PictureController::class, 'postPicture']);
 });
 
+Route::get('/pictures',[PictureController::class, 'searchPictures']);
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
