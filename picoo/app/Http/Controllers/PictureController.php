@@ -17,7 +17,7 @@ class PictureController extends Controller
         $user = Auth::User();
         $param = [
             'user' => $user,
-            'tags' => NULL,
+            'search_tags' => NULL,
         ];
 
         return view('index',$param);
@@ -73,7 +73,7 @@ class PictureController extends Controller
 
         $param = [
             'user' => $user,
-            'tags' => NULL
+            'search_tags' => NULL
         ];
         return view('index',$param);
     }
@@ -103,6 +103,7 @@ class PictureController extends Controller
                 }
             }
             //検索ワードの文字数が特定の1文字(a,e,rなど)のときに検索不具合　次回以降の課題
+            //strposの不具合か？
             if($duplicates === count($searched_tag_array)) {
                 array_push($picture_ids,$picture->id);
             }
@@ -113,8 +114,21 @@ class PictureController extends Controller
         $param = [
             'user' => $user,
             'pictures' => $search_result,
-            'tags' => $searched_tag,
+            'search_tags' => $searched_tag,
         ];
         return view('pictures',$param);
+    }
+
+    public function picturePage(Request $request) {
+        $user = Auth::user();
+        $picture = Picture::where('id',$request->picture_id)->first();
+        $tags = $picture->tags;
+        $param = [
+            'user' => $user,
+            'picture' => $picture,
+            'tags' => $tags,
+            'search_tags' => NULL,
+        ];
+        return view('picturepage',$param);
     }
 }

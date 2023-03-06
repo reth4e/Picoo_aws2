@@ -19,6 +19,7 @@ Route::group(['middleware' => 'auth'],function() {
 });
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);
+Route::get('/pictures/{picture_id}',[PictureController::class, 'picturePage']);
 
 
 Route::get('/dashboard', function () {
