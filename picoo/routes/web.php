@@ -16,6 +16,8 @@ use App\Http\Controllers\PictureController;
 Route::group(['middleware' => 'auth'],function() {
     Route::get('/', [PictureController::class, 'index']);
     Route::post('/', [PictureController::class, 'postPicture']);
+    Route::post('/pictures/{picture_id}/tag',[PictureController::class, 'insertTag']);
+    Route::delete('/pictures/{picture_id}/tag/{tag_id}',[PictureController::class, 'deleteTag']);
 });
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);

@@ -7,9 +7,6 @@
         </div>
         <div>
             @foreach($tags as $tag)
-                <a href="/pictures?contents={{$tag->name}}">{{$tag->name}}</a>
-                <!-- 3/5次回、ここのフォーム化、タグの更新・削除
-                できればユーザーページ関連も-->
                 @if($picture->tag_count > 1)
                     <form action="/pictures/{{$picture->id}}/tag/{{$tag->id}}" method="post">
                         @csrf
@@ -17,6 +14,9 @@
                         <button class="btn btn-delete">×</button>
                     </form>
                 @endif
+                <a href="/pictures?contents={{$tag->name}}">{{$tag->name}}</a>
+                <!-- 3/7次回、ユーザーページ関連-->
+                
             @endforeach
             <!-- ここは後で投稿者しか編集できないようにする -->
             @if($picture->tag_count < 10)

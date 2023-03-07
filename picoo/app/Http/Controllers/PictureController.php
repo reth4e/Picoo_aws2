@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Http\Requests\PictureRequest;
+use App\Http\Requests\TagRequest;
 
 class PictureController extends Controller
 {
@@ -130,5 +131,30 @@ class PictureController extends Controller
             'search_tags' => NULL,
         ];
         return view('picturepage',$param);
+    }
+
+    public function insertTag($picture_id, TagRequest $request) {
+        $picture = Picture::where('id',$picture_id)->first();
+        $tag = $request->tag;
+        // unset($tag['_token']);
+        $tag = Tag::firstOrCreate([
+            'name' => $tag,
+        ]);
+        $picture->tags()->syncWithoutDetaching($tag->id);
+        $tag_count = count($picture->tags);
+        $picture->tag_count = $tag_count;
+        $picture->save();
+
+        return back();
+    }
+
+    public function deleteTag($picture_id,$tag_id) {
+        $picture = Picture::where('id',$picture_id)->first();
+        $picture->tags()->detach($tag_id);
+        $tag_count = count($picture->tags);
+        $picture->tag_count = $tag_count;
+        $picture->save();
+
+        return back();
     }
 }
