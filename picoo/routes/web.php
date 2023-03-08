@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PictureController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,10 @@ Route::group(['middleware' => 'auth'],function() {
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);
 Route::get('/pictures/{picture_id}',[PictureController::class, 'picturePage']);
+
+
+Route::get('/user/{user_id}',[UserController::class, 'userPage']);
+Route::delete('/user/{user_id}/picture/{picture_id}',[UserController::class, 'deleteMyPicture']);
 
 
 Route::get('/dashboard', function () {

@@ -15,9 +15,9 @@ class PictureController extends Controller
 {
 
     public function index(){
-        $user = Auth::User();
+        $login_user = Auth::user();
         $param = [
-            'user' => $user,
+            'login_user' => $login_user,
             'search_tags' => NULL,
         ];
 
@@ -26,7 +26,7 @@ class PictureController extends Controller
 
     public function postPicture(PictureRequest $request)
     {
-        $user = Auth::user();
+        $login_user = Auth::user();
         $picture = new Picture;
         $date = Carbon::now();
 
@@ -36,8 +36,8 @@ class PictureController extends Controller
         unset($picture['_token']);
 
 
-        $user->last_uploaded = $date;
-        $user->save();
+        $login_user->last_uploaded = $date;
+        $login_user->save();
 
 
         $input_tag = $request->tags;
@@ -46,12 +46,12 @@ class PictureController extends Controller
         $input_tag = preg_replace('/\s+/', ' ', $input_tag);
 
         $tag_ids = [];
-        $tags = explode(' ', $input_tag);
-        if(count($tags)>10){
+        $input_tag_to_array = explode(' ', $input_tag);
+        if(count($input_tag_to_array)>10){
             return back();
         }
 
-        foreach($tags as $tag){
+        foreach($input_tag_to_array as $tag){
             if(strlen($tag)>20){
                 return back();
             }
@@ -65,7 +65,7 @@ class PictureController extends Controller
         $picture->user_id = $request->user()->id;
         $picture->file_path = 'storage/pictures/' . $file_name;
         $picture->title = $request->title;
-        $picture->tag_count = count($tags);
+        $picture->tag_count = count($input_tag_to_array);
         $picture->post_comment = $request->post_comment;
         $picture->save();
 
@@ -73,7 +73,7 @@ class PictureController extends Controller
         $picture->tags()->syncWithoutDetaching($tag_ids);
 
         $param = [
-            'user' => $user,
+            'login_user' => $login_user,
             'search_tags' => NULL
         ];
         return view('index',$param);
@@ -81,7 +81,7 @@ class PictureController extends Controller
 
 
     public function searchPictures(Request $request) {
-        $user = Auth::user();
+        $login_user = Auth::user();
 
         $searched_tag = $request->contents;
         $searched_tag = str_replace('　', ' ', $searched_tag);
@@ -113,7 +113,7 @@ class PictureController extends Controller
         $search_result = Picture::whereIn('id',$picture_ids)->paginate(20);
         
         $param = [
-            'user' => $user,
+            'login_user' => $login_user,
             'pictures' => $search_result,
             'search_tags' => $searched_tag,
         ];
@@ -121,11 +121,11 @@ class PictureController extends Controller
     }
 
     public function picturePage(Request $request) {
-        $user = Auth::user();
+        $login_user = Auth::user();
         $picture = Picture::where('id',$request->picture_id)->first();
         $tags = $picture->tags;
         $param = [
-            'user' => $user,
+            'login_user' => $login_user,
             'picture' => $picture,
             'tags' => $tags,
             'search_tags' => NULL,
@@ -135,12 +135,27 @@ class PictureController extends Controller
 
     public function insertTag($picture_id, TagRequest $request) {
         $picture = Picture::where('id',$picture_id)->first();
-        $tag = $request->tag;
-        // unset($tag['_token']);
-        $tag = Tag::firstOrCreate([
-            'name' => $tag,
-        ]);
-        $picture->tags()->syncWithoutDetaching($tag->id);
+        $input_tag = $request->tags;
+        $input_tag = str_replace('　', ' ', $input_tag);
+        //複数の半角スペースを単一の半角スペースにする
+        $input_tag = preg_replace('/\s+/', ' ', $input_tag);
+
+        $tag_ids = [];
+        $input_tag_to_array = explode(' ', $input_tag);
+        if(count($input_tag_to_array) + $picture->tag_count>10){
+            return back();
+        }
+        foreach($input_tag_to_array as $tag){
+            if(strlen($tag)>20){
+                return back();
+            }
+            $tag = Tag::firstOrCreate([
+                'name' => $tag,
+            ]);
+            array_push($tag_ids, $tag->id);
+        }
+        
+        $picture->tags()->syncWithoutDetaching($tag_ids);
         $tag_count = count($picture->tags);
         $picture->tag_count = $tag_count;
         $picture->save();
