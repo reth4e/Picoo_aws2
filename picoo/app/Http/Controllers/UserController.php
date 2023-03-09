@@ -27,4 +27,6 @@ class UserController extends Controller
         $picture = Picture::find($picture_id)->delete();
         return back();
     }
+
+    
 }

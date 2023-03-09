@@ -25,7 +25,6 @@ class PictureRequest extends FormRequest
     {
         return [
             'title' => 'max:30',
-            'tag_count' => 'min:1|max:10',
             'post_comment' => 'max:300',
         ];
     }

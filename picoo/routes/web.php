@@ -19,6 +19,9 @@ Route::group(['middleware' => 'auth'],function() {
     Route::post('/', [PictureController::class, 'postPicture']);
     Route::post('/pictures/{picture_id}/tag',[PictureController::class, 'insertTag']);
     Route::delete('/pictures/{picture_id}/tag/{tag_id}',[PictureController::class, 'deleteTag']);
+    Route::put('/pictures/{picture_id}/title',[PictureController::class, 'changeTitle']);
+    Route::put('/pictures/{picture_id}/post_comment',[PictureController::class, 'changePostComment']);
+    Route::post('/pictures/{picture_id}/comment',[PictureController::class, 'addComment']);
 });
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);

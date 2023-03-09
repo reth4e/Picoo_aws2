@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Picture;
 use App\Models\Tag;
-use App\Models\User;
+use App\Models\Comment;
 use Carbon\Carbon;
 use App\Http\Requests\PictureRequest;
-use App\Http\Requests\TagRequest;
+use App\Http\Requests\CommentRequest;
 
 class PictureController extends Controller
 {
@@ -124,16 +124,19 @@ class PictureController extends Controller
         $login_user = Auth::user();
         $picture = Picture::where('id',$request->picture_id)->first();
         $tags = $picture->tags;
+        $comments = Comment::where('picture_id',$request->picture_id)->orderBy('id','desc')->paginate(10);
+
         $param = [
             'login_user' => $login_user,
             'picture' => $picture,
             'tags' => $tags,
+            'comments' => $comments,
             'search_tags' => NULL,
         ];
         return view('picturepage',$param);
     }
 
-    public function insertTag($picture_id, TagRequest $request) {
+    public function insertTag ($picture_id, Request $request) {
         $picture = Picture::where('id',$picture_id)->first();
         $input_tag = $request->tags;
         $input_tag = str_replace('　', ' ', $input_tag);
@@ -142,11 +145,11 @@ class PictureController extends Controller
 
         $tag_ids = [];
         $input_tag_to_array = explode(' ', $input_tag);
-        if(count($input_tag_to_array) + $picture->tag_count>10){
+        if(count($input_tag_to_array) + $picture->tag_count > 10){
             return back();
         }
         foreach($input_tag_to_array as $tag){
-            if(strlen($tag)>20){
+            if(strlen($tag) > 20){
                 return back();
             }
             $tag = Tag::firstOrCreate([
@@ -154,7 +157,7 @@ class PictureController extends Controller
             ]);
             array_push($tag_ids, $tag->id);
         }
-        
+
         $picture->tags()->syncWithoutDetaching($tag_ids);
         $tag_count = count($picture->tags);
         $picture->tag_count = $tag_count;
@@ -163,12 +166,39 @@ class PictureController extends Controller
         return back();
     }
 
-    public function deleteTag($picture_id,$tag_id) {
+    public function deleteTag ($picture_id,$tag_id) {
         $picture = Picture::where('id',$picture_id)->first();
         $picture->tags()->detach($tag_id);
         $tag_count = count($picture->tags);
         $picture->tag_count = $tag_count;
         $picture->save();
+
+        return back();
+    }
+
+    public function changeTitle ($picture_id, PictureRequest $request) {
+        $picture = Picture::where('id',$picture_id)->first();
+        $picture->title = $request->title;
+        $picture->save();
+        return back();
+    }
+
+    public function changePostComment ($picture_id, PictureRequest $request) {
+        $picture = Picture::where('id',$picture_id)->first();
+        $picture->post_comment = $request->post_comment;
+        $picture->save();
+        return back();
+    }
+
+    public function addComment ($picture_id, CommentRequest $request) {
+        $picture = Picture::where('id',$picture_id)->first();
+        $login_user = Auth::user();
+
+        $comment = new Comment;
+        $comment->content = $request->comment;
+        $comment->user_id = $request->user()->id;
+        $comment->picture_id = $picture_id;
+        $comment->save();
 
         return back();
     }
