@@ -22,6 +22,8 @@ Route::group(['middleware' => 'auth'],function() {
     Route::put('/pictures/{picture_id}/title',[PictureController::class, 'changeTitle']);
     Route::put('/pictures/{picture_id}/post_comment',[PictureController::class, 'changePostComment']);
     Route::post('/pictures/{picture_id}/comment',[PictureController::class, 'addComment']);
+    Route::put('/pictures/{picture_id}/comment/{comment_id}',[PictureController::class, 'updateComment']);
+    Route::delete('/pictures/{picture_id}/comment/{comment_id}',[PictureController::class, 'deleteComment']);
 });
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);

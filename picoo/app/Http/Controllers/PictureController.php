@@ -177,16 +177,18 @@ class PictureController extends Controller
     }
 
     public function changeTitle ($picture_id, PictureRequest $request) {
-        $picture = Picture::where('id',$picture_id)->first();
-        $picture->title = $request->title;
-        $picture->save();
+        $picture = Picture::where('id',$picture_id) -> first();
+        $picture -> title = $request -> title;
+        unset($picture['_token']);
+        $picture -> save();
         return back();
     }
 
     public function changePostComment ($picture_id, PictureRequest $request) {
-        $picture = Picture::where('id',$picture_id)->first();
-        $picture->post_comment = $request->post_comment;
-        $picture->save();
+        $picture = Picture::where('id',$picture_id) -> first();
+        $picture -> post_comment = $request -> post_comment;
+        unset($picture['_token']);
+        $picture -> save();
         return back();
     }
 
@@ -200,6 +202,20 @@ class PictureController extends Controller
         $comment->picture_id = $picture_id;
         $comment->save();
 
+        return back();
+    }
+
+    public function updateComment ($picture_id, $comment_id ,CommentRequest $request) {
+        $picture = Picture::where('id',$picture_id)->first();
+        $comment = Comment::where('id',$comment_id)->first();
+        $comment->content = $request->content;
+        $comment->save();
+
+        return back();
+    }
+
+    public function deleteComment ($picture_id, $comment_id) {
+        $comment = Comment::find($comment_id)->delete();
         return back();
     }
 }
