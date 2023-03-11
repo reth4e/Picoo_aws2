@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Picture;
-use App\Models\Tag;
 use App\Models\User;
 
 class UserController extends Controller
@@ -64,5 +63,19 @@ class UserController extends Controller
             'search_tags' => NULL,
         ];
         return view('follows',$param);
+    }
+
+    public function addNg ($user_id) {
+        $login_user = Auth::user();
+        $login_user -> ngUsers() -> syncWithoutDetaching($user_id);
+
+        return back();
+    }
+
+    public function deleteNg ($user_id) {
+        $login_user = Auth::user();
+        $login_user -> ngUsers() -> detach($user_id);
+
+        return back();
     }
 }

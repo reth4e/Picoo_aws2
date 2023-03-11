@@ -100,7 +100,12 @@
                         <button class = "btn btn-delete">×</button>
                     </form>
                 @else
+                    @if ($login_user -> ngUsers() -> where('ng_user_id', $comment->user->id) -> exists())
+                    <a href="/user/{{$comment -> user -> id}}/delete_ng">このユーザーをNG解除</a>
+                    @else
                     <p>{{$comment -> content}}</p>
+                    <a href="/user/{{$comment -> user -> id}}/add_ng">このユーザーをNG</a>
+                    @endif
                 @endif
                 <p>{{$comment -> updated_at}}</p>
             @endforeach

@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\User', 'follower_user', 'follower_id', 'user_id');
     }
+
+    public function ngUsers ()
+    {
+        return $this->belongsToMany('App\Models\User', 'ng_user', 'user_id', 'ng_user_id');
+    }
 }
