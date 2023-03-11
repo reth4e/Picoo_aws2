@@ -28,5 +28,41 @@ class UserController extends Controller
         return back();
     }
 
-    
+    public function addFollow ($user_id) {
+        $login_user = Auth::user();
+
+        $login_user->follows()->syncWithoutDetaching($user_id);
+        return back();
+    }
+
+    public function deleteFollow ($user_id) {
+        $login_user = Auth::user();
+
+        $login_user->follows()->detach($user_id);
+        return back();
+    }
+
+    public function favorites () {
+        $login_user = Auth::user();
+        $favorites = $login_user -> favorites() -> paginate(20);
+
+        $param =[
+            'login_user' => $login_user,
+            'favorites' => $favorites,
+            'search_tags' => NULL,
+        ];
+        return view('favorites',$param);
+    }
+
+    public function follows () {
+        $login_user = Auth::user();
+        $follows = $login_user -> follows() -> paginate(20);
+
+        $param =[
+            'login_user' => $login_user,
+            'follows' => $follows,
+            'search_tags' => NULL,
+        ];
+        return view('follows',$param);
+    }
 }

@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth'],function() {
     Route::get('/pictures/{picture_id}/delete_like', [PictureController::class, 'deleteLike']);
     Route::get('/user/{user_id}/add_follow',[UserController::class, 'addFollow']);
     Route::get('/user/{user_id}/delete_follow',[UserController::class, 'deleteFollow']);
+    Route::get('/user/favorites',[UserController::class, 'favorites']);
+    Route::get('/user/follows',[UserController::class, 'follows']);
 });
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);

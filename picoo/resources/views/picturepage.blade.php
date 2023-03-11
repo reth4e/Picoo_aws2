@@ -8,7 +8,7 @@
 
         <div>
             @if ($picture -> usersWhoLike() -> where('user_id', Auth::id()) -> exists())
-                <a href="/pictures/{{$picture -> id}}/delete_like">いいね</a>
+                <a href="/pictures/{{$picture -> id}}/delete_like">いいね済</a>
             @else
                 <a href="/pictures/{{$picture -> id}}/add_like">いいね</a>
             @endif
@@ -69,7 +69,11 @@
 
         <div>
             <a href = "/user/{{$picture -> user -> id}}">{{$picture->user->name}}</a>
-            
+            @if ($picture -> user -> followers() -> where('follower_id', Auth::id()) -> exists())
+                <a href="/user/{{$picture -> user -> id}}/delete_follow">フォロー中</a>
+            @else
+                <a href="/user/{{$picture -> user -> id}}/add_follow">フォローする</a>
+            @endif
         </div>
 
         <div>
