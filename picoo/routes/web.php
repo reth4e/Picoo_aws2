@@ -24,6 +24,10 @@ Route::group(['middleware' => 'auth'],function() {
     Route::post('/pictures/{picture_id}/comment',[PictureController::class, 'addComment']);
     Route::put('/pictures/{picture_id}/comment/{comment_id}',[PictureController::class, 'updateComment']);
     Route::delete('/pictures/{picture_id}/comment/{comment_id}',[PictureController::class, 'deleteComment']);
+    Route::get('/pictures/{picture_id}/add_like', [PictureController::class, 'addLike']);
+    Route::get('/pictures/{picture_id}/delete_like', [PictureController::class, 'deleteLike']);
+    Route::get('/user/{user_id}/add_follow',[UserController::class, 'addFollow']);
+    Route::get('/user/{user_id}/delete_follow',[UserController::class, 'deleteFollow']);
 });
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);

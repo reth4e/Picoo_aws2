@@ -50,4 +50,18 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Picture');
     }
 
+    public function favorites ()
+    {
+        return $this->belongsToMany('App\Models\Picture', 'likes', 'user_id', 'picture_id');
+    }
+
+    public function followers ()
+    {
+        return $this->belongsToMany('App\Models\User', 'follower_user', 'user_id', 'follower_id');
+    }
+
+    public function follows ()
+    {
+        return $this->belongsToMany('App\Models\User', 'follower_user', 'follower_id', 'user_id');
+    }
 }

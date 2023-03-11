@@ -193,8 +193,6 @@ class PictureController extends Controller
     }
 
     public function addComment ($picture_id, CommentRequest $request) {
-        $picture = Picture::where('id',$picture_id)->first();
-        $login_user = Auth::user();
 
         $comment = new Comment;
         $comment->content = $request->comment;
@@ -206,7 +204,6 @@ class PictureController extends Controller
     }
 
     public function updateComment ($picture_id, $comment_id ,CommentRequest $request) {
-        $picture = Picture::where('id',$picture_id)->first();
         $comment = Comment::where('id',$comment_id)->first();
         $comment->content = $request->content;
         $comment->save();
@@ -218,4 +215,19 @@ class PictureController extends Controller
         $comment = Comment::find($comment_id)->delete();
         return back();
     }
+
+    public function addLike ($picture_id) {
+        $login_user = Auth::user();
+        $login_user->favorites()->syncWithoutDetaching($picture_id);
+        
+        return back();
+    }
+
+    public function deleteLike ($picture_id) {
+        $login_user = Auth::user();
+        $login_user->favorites()->detach($picture_id);
+        
+        return back();
+    }
+
 }

@@ -32,4 +32,9 @@ class Picture extends Model
     {
         return $this->hasMany('App\Models\Comment');
     }
+
+    public function usersWhoLike ()
+    {
+        return $this->belongsToMany('App\Models\User', 'likes', 'picture_id', 'user_id');
+    }
 }

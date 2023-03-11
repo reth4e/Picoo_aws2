@@ -7,10 +7,19 @@
         </div>
 
         <div>
+            @if ($picture -> usersWhoLike() -> where('user_id', Auth::id()) -> exists())
+                <a href="/pictures/{{$picture -> id}}/delete_like">いいね</a>
+            @else
+                <a href="/pictures/{{$picture -> id}}/add_like">いいね</a>
+            @endif
+            <p>{{$picture->usersWhoLike->count()}}</p>
+        </div>
+
+        <div>
             @if($picture -> user -> id === $login_user -> id)
                 <form action = "/pictures/{{$picture -> id}}/title" method = "post">
                     @csrf
-                    <input type = "text" name = "title" value = "{{$picture -> title}}">
+                    <input type = "text" name = "title" value = "{{$picture -> title}}" placeholder = "タイトル編集">
                     <input type = "hidden" name = "_method" value = "PUT">
                     <input type = "submit" value = "更新">
                 </form>
@@ -23,7 +32,7 @@
             @if($picture->user->id === $login_user->id)
                 <form action = "/pictures/{{$picture -> id}}/post_comment" method = "post">
                     @csrf
-                    <input type = "text" name = "post_comment" value = "{{$picture -> post_comment}}">
+                    <input type = "text" name = "post_comment" value = "{{$picture -> post_comment}}" placeholder = "投稿者コメント編集">
                     <input type = "hidden" name = "_method" value = "PUT">
                     <input type = "submit" value = "更新">
                 </form>
@@ -60,6 +69,7 @@
 
         <div>
             <a href = "/user/{{$picture -> user -> id}}">{{$picture->user->name}}</a>
+            
         </div>
 
         <div>
