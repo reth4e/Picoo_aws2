@@ -12,9 +12,7 @@ class Picture extends Model
     protected $guarded = array('id');
 
     protected $fillable = [
-        'file_path',
         'title',
-        'tag_count',
         'post_comment',
     ];
 

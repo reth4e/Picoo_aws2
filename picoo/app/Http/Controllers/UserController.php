@@ -11,8 +11,8 @@ class UserController extends Controller
 {
     public function userPage ($user_id) {
         $login_user = Auth::user();
-        $user = User::where('id',$user_id)->first();
-        $pictures = $user->pictures()->paginate(20);
+        $user = User::find($user_id);
+        $pictures = $user -> pictures() -> paginate(20);
         $param = [
             'login_user' => $login_user,
             'user' => $user,
@@ -23,14 +23,18 @@ class UserController extends Controller
     }
 
     public function deleteMyPicture ($user_id, $picture_id) {
-        $picture = Picture::find($picture_id)->delete();
+        $picture = Picture::find($picture_id) -> delete();
         return back();
     }
 
     public function addFollow ($user_id) {
         $login_user = Auth::user();
 
-        $login_user->follows()->syncWithoutDetaching($user_id);
+        $login_user -> follows() -> syncWithoutDetaching($user_id);
+
+        $user = User::find($user_id);
+        $user -> followers_count = count($user -> followers);
+        $user -> save();
         return back();
     }
 
@@ -38,6 +42,10 @@ class UserController extends Controller
         $login_user = Auth::user();
 
         $login_user->follows()->detach($user_id);
+
+        $user = User::find($user_id);
+        $user -> followers_count = count($user -> followers);
+        $user -> save();
         return back();
     }
 
@@ -76,6 +84,17 @@ class UserController extends Controller
         $login_user = Auth::user();
         $login_user -> ngUsers() -> detach($user_id);
 
+        return back();
+    }
+
+    public function changeIcon (Request $request) {
+        $login_user = Auth::user();
+        $icon_name = $request -> file('image') -> getClientOriginalName();
+        $request -> file('image') -> storeAs('public/icons' , $icon_name);
+
+        $login_user -> icon_path = 'storage/icons/' . $icon_name;
+        unset($login_user['_token']);
+        $login_user -> save();
         return back();
     }
 }

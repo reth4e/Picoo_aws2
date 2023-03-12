@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth'],function() {
     Route::delete('/pictures/{picture_id}/comment/{comment_id}',[PictureController::class, 'deleteComment']);
     Route::get('/pictures/{picture_id}/add_like', [PictureController::class, 'addLike']);
     Route::get('/pictures/{picture_id}/delete_like', [PictureController::class, 'deleteLike']);
+    Route::put('/user/{user_id}',[UserController::class, 'changeIcon']);
     Route::get('/user/{user_id}/add_follow',[UserController::class, 'addFollow']);
     Route::get('/user/{user_id}/delete_follow',[UserController::class, 'deleteFollow']);
     Route::get('/user/favorites',[UserController::class, 'favorites']);
@@ -36,7 +37,7 @@ Route::group(['middleware' => 'auth'],function() {
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);
 Route::get('/pictures/{picture_id}',[PictureController::class, 'picturePage']);
-
+Route::get('/popular',[PictureController::class, 'popularPage']);
 
 Route::get('/user/{user_id}',[UserController::class, 'userPage']);
 Route::delete('/user/{user_id}/picture/{picture_id}',[UserController::class, 'deleteMyPicture']);
