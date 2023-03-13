@@ -33,6 +33,8 @@ Route::group(['middleware' => 'auth'],function() {
     Route::get('/user/follows',[UserController::class, 'follows']);
     Route::get('/user/{user_id}/add_ng',[UserController::class, 'addNg']);
     Route::get('/user/{user_id}/delete_ng',[UserController::class, 'deleteNg']);
+    Route::get('/user/{user_id}/notification',[UserController::class, 'readAll']);
+    Route::get('/user/{user_id}/notification/{notification_id}',[UserController::class, 'read']);
 });
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);

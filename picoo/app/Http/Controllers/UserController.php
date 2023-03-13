@@ -18,6 +18,7 @@ class UserController extends Controller
             'user' => $user,
             'pictures' => $pictures,
             'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
         return view('userpage',$param);
     }
@@ -41,7 +42,7 @@ class UserController extends Controller
     public function deleteFollow ($user_id) {
         $login_user = Auth::user();
 
-        $login_user->follows()->detach($user_id);
+        $login_user -> follows() -> detach($user_id);
 
         $user = User::find($user_id);
         $user -> followers_count = count($user -> followers);
@@ -57,6 +58,7 @@ class UserController extends Controller
             'login_user' => $login_user,
             'favorites' => $favorites,
             'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
         return view('favorites',$param);
     }
@@ -69,6 +71,7 @@ class UserController extends Controller
             'login_user' => $login_user,
             'follows' => $follows,
             'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
         return view('follows',$param);
     }
@@ -95,6 +98,20 @@ class UserController extends Controller
         $login_user -> icon_path = 'storage/icons/' . $icon_name;
         unset($login_user['_token']);
         $login_user -> save();
+        return back();
+    }
+
+    public function read (Request $request) {
+        $login_user = Auth::user();
+        $notification = $login_user -> notifications() -> find($request -> notification_id);
+        $notification -> markAsRead();
+
+        return back();
+    }
+
+    public function readAll () {
+        auth() -> user() -> unreadNotifications -> markAsRead();
+
         return back();
     }
 }

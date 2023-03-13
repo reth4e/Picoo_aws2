@@ -8,18 +8,20 @@ use App\Models\Picture;
 use App\Models\Tag;
 use App\Models\Comment;
 use App\Models\User;
-use Carbon\Carbon;
 use App\Http\Requests\PictureRequest;
 use App\Http\Requests\CommentRequest;
+use App\Notifications\PictureNotification;
+use Illuminate\Support\Facades\Notification;
 
 class PictureController extends Controller
 {
-
+    
     public function index(){
         $login_user = Auth::user();
         $param = [
             'login_user' => $login_user,
             'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
 
         return view('index',$param);
@@ -28,17 +30,13 @@ class PictureController extends Controller
     public function postPicture(PictureRequest $request)
     {
         $login_user = Auth::user();
+
         $picture = new Picture;
-        $date = Carbon::now();
 
         $file_name = $request->file('image')->getClientOriginalName();
         $request->file('image')->storeAs('public/pictures' , $file_name);
         
         unset($picture['_token']);
-
-
-        $login_user->last_uploaded = $date;
-        $login_user->save();
 
 
         $input_tag = $request->tags;
@@ -74,9 +72,14 @@ class PictureController extends Controller
 
         $picture->tags()->syncWithoutDetaching($tag_ids);
 
+
+        $followers = $login_user -> followers;
+        Notification::send($followers, new PictureNotification($picture));
+
         $param = [
             'login_user' => $login_user,
-            'search_tags' => NULL
+            'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
         return view('index',$param);
     }
@@ -118,6 +121,7 @@ class PictureController extends Controller
             'login_user' => $login_user,
             'pictures' => $search_result,
             'search_tags' => $searched_tag,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
         return view('pictures',$param);
     }
@@ -134,6 +138,7 @@ class PictureController extends Controller
             'tags' => $tags,
             'comments' => $comments,
             'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
         return view('picturepage',$param);
     }
@@ -248,6 +253,7 @@ class PictureController extends Controller
             'popular_pictures' => $popular_pictures,
             'popular_users' => $popular_users,
             'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
         ];
         return view('popularpage',$param);
     }
