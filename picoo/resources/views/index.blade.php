@@ -2,25 +2,25 @@
 
 @section('main')
     <div class="container">
-        <form action="/" method="POST" enctype="multipart/form-data">
+        <form class="picture-form" action="/" method="POST" enctype="multipart/form-data">
             @csrf
-            <label for="file">
-                <input type="file" id="file" name="image"  required accept="image/jpeg, image/png, .jpeg, .png"/>
-            </label>
             
-            <label for="title">
+            <input class="picture-form-file" type="file" name="image"  required accept="image/jpeg, image/png, .jpeg, .png"/>
+            
+            <label>
                 画像タイトル
-                <input type="text" placeholder="画像タイトル" id="title" name="title">
+                <input type="text" placeholder="画像タイトル" name="title">
             </label>
             <label>
                 投稿コメント
-                <textarea name="post_comment" id="" cols="30" rows="11" placeholder="投稿コメント"></textarea>
+                <textarea name="post_comment" cols="30" rows="11" placeholder="投稿コメント"></textarea>
             </label>
-            <label for="tag">
+            <label>
                 タグ名
-                <input type="text" placeholder="タグ名" id="tag" name="tags" required>
+                <input type="text" placeholder="タグ名" name="tags" required>
             </label>
-            <button>投稿する</button>
+            <button class="btn picture-form-btn">投稿する</button>
+            
         </form>
     </div>
 @endsection

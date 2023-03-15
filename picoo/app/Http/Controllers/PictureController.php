@@ -108,8 +108,6 @@ class PictureController extends Controller
                     }
                 }
             }
-            //検索ワードの文字数が特定の1文字(a,e,rなど)のときに検索不具合　次回以降の課題
-            //strposの不具合か？
             if($duplicates === count($searched_tag_array)) {
                 array_push($picture_ids,$picture -> id);
             }
