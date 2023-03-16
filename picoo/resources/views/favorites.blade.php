@@ -2,9 +2,24 @@
 
 @section('main')
     <div class = "container">
-        <div>
+        <div class="favorite-title">
+            <p>お気に入り画像</p>
+        </div>
+        <div class="pictures favorite-pictures">
             @foreach ($favorites as $favorite)
-            <a href="/pictures/{{$favorite -> id}}"><img src="../../{{$favorite -> file_path}}" alt=""></a>
+            <a href="/pictures/{{$favorite -> id}}">
+                <div class="favorite-picture-card card">
+                    <div class="favorite-picture picture">
+                        <img src="../../{{$favorite -> file_path}}" alt="" class="favorite-picture-img img">
+                    </div>
+                    <div>
+                        <p>{{$favorite->title}}</p>
+                    </div>
+                    <div>
+                        <a href="/user/{{$favorite -> user -> id}}">{{$favorite -> user -> name}}</a>
+                    </div>
+                </div>
+            </a>
             @endforeach
         </div>
         {{ $favorites->links('pagination::bootstrap-4') }}

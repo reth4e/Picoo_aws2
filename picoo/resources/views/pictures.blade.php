@@ -3,12 +3,12 @@
 @section('main')
     <div class="container">
         <p class="search-result">{{$search_tags}} での検索結果</p>
-        <div class="searched-pictures">
+        <div class="searched-pictures pictures">
             @foreach($pictures as $picture)
             <a href="/pictures/{{$picture->id}}">
-                <div class="searched-picture-card">
-                    <div class="searched-picture">
-                        <img src="{{$picture->file_path}}" alt="" class="searched-picture-img"/>
+                <div class="searched-picture-card card">
+                    <div class="searched-picture picture">
+                        <img src="{{$picture->file_path}}" alt="" class="searched-picture-img img"/>
                     </div>
                     <div>
                         <p>{{$picture->title}}</p>

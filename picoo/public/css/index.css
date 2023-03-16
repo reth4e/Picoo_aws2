@@ -15,7 +15,7 @@ a {
 
 p {
     word-wrap: break-word;
-    font-size: 1.5vw;
+    font-size: 2vw;
 }
 
 input[type="text"] {
@@ -93,6 +93,7 @@ textarea {
 
 .container {
     width: 100vw;
+    margin-top: 20vh;
 }
 
 
@@ -131,27 +132,27 @@ textarea {
     margin: 20vh 0;
 }
 
-.searched-pictures {
+.pictures {
     width: 80%;
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
 }
 
-.searched-picture-card {
+.card {
     margin-right: 4vw;
     margin-bottom: 10vh;
 }
 
-.searched-picture {
+.picture {
     width: 16vw;
     height: 30vh;
 }
 
-.searched-picture-img {
+.img {
     width: 100%;
     height: 100%;
-    border-radius: 2px;
+    border-radius: 1vw;
     object-fit: cover;
     object-position: center center;
     overflow: clip;
@@ -175,7 +176,6 @@ textarea {
 .picturepage-wrap {
     width: 60vw;
     margin: 20vh auto;
-
 }
 
 .picture-img {
@@ -234,6 +234,35 @@ textarea {
 .picturepage-comment-date {
     width: 100%;
     margin-top: 5vh;
+}
+
+
+
+.userpage {
+    text-align: center;
+    margin-bottom: 30vh;
+}
+
+.userpage-icon {
+    width: 50vw;
+    height: 70vh;
+    margin: 0 auto 10vh;
+}
+
+.userpage-icon-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50vw;
+    object-fit: cover;
+    object-position: center center;
+    overflow: clip;
+}
+
+
+
+.favorite-title {
+    text-align: center;
+    margin-bottom: 20vh;
 }
 
 

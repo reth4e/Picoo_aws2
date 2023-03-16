@@ -3,7 +3,7 @@
 @section('main')
     <div class = "container">
         <div class="picturepage-wrap">
-            <div class="picture">
+            <div class="picturepage-picture">
                 <img src = "../../{{$picture -> file_path}}" alt = "{{$picture->file_path}}" class="picture-img">
             </div>
 
@@ -17,7 +17,7 @@
             </div>
 
             <div class="picturepage-title">
-                @if($picture -> user -> id === $login_user -> id)
+                @if($picture -> user -> id === Auth::id())
                     <form action = "/pictures/{{$picture -> id}}/title" method = "post" class="picturepage-form" >
                         @csrf
                         <input type = "text" name = "title" value = "{{$picture -> title}}" placeholder = "タイトル編集" id="title">
@@ -30,7 +30,7 @@
             </div>
 
             <div class = "picturepage-post_comment">
-                @if($picture->user->id === $login_user->id)
+                @if($picture->user->id === Auth::id())
                     <form action = "/pictures/{{$picture -> id}}/post_comment" method = "post" class="picturepage-form">
                         @csrf
                         <textarea type = "text" name = "post_comment" placeholder = "投稿者コメント編集" rows="20" id="post_comment">{{$picture -> post_comment}}</textarea>
@@ -44,7 +44,7 @@
 
             <div class = "picturepage-tag">
                 @foreach($tags as $tag)
-                    @if($picture->user->id === $login_user->id)
+                    @if($picture->user->id === Auth::id())
                         @if($picture->tag_count > 1)
                             <form action = "/pictures/{{$picture -> id}}/tag/{{$tag -> id}}" method = "post">
                                 @csrf
@@ -58,7 +58,7 @@
                 @endforeach
             </div>
                 
-                @if($picture->user->id === $login_user->id)
+                @if($picture->user->id === Auth::id())
                     @if($picture->tag_count < 10)
                         <form action = "/pictures/{{$picture -> id}}/tag" method = "post" class="picturepage-tagform">
                             @csrf
@@ -89,7 +89,7 @@
                 @foreach ($comments as $comment)
                 <div class="picturepage-comment">
                     <a href = "/user/{{$comment -> user -> id}}">{{$comment -> user -> name}}</a>
-                    @if ($comment -> user -> id === $login_user -> id)
+                    @if ($comment -> user -> id === Auth::id())
                         <form action="/pictures/{{$picture -> id}}/comment/{{$comment -> id}}" method = "post">
                             @csrf
                             <input type = "hidden" name = "_method" value = "PUT">
@@ -102,7 +102,7 @@
                             <button class = "btn btn-delete">×</button>
                         </form>
                     @else
-                        @if ($login_user -> ngUsers() -> where('ng_user_id', $comment->user->id) -> exists())
+                        @if (auth() -> user() -> ngUsers() -> where('ng_user_id', $comment->user->id) -> exists())
                         <a href="/user/{{$comment -> user -> id}}/delete_ng">このユーザーをNG解除</a>
                         @else
                         <p>{{$comment -> content}}</p>
