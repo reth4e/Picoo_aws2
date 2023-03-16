@@ -13,11 +13,11 @@
             </label>
             <label>
                 投稿コメント
-                <textarea name="post_comment" cols="30" rows="11" placeholder="投稿コメント"></textarea>
+                <textarea name="post_comment" rows="20" placeholder="投稿コメント"></textarea>
             </label>
             <label>
                 タグ名
-                <input type="text" placeholder="タグ名" name="tags" required>
+                <textarea type="text" placeholder="タグ名" name="tags" rows="10" required></textarea>
             </label>
             <button class="btn picture-form-btn">投稿する</button>
             

@@ -2,113 +2,117 @@
 
 @section('main')
     <div class = "container">
-        <div>
-            <img src = "../../{{$picture -> file_path}}" alt = "{{$picture->file_path}}">
-        </div>
+        <div class="picturepage-wrap">
+            <div class="picture">
+                <img src = "../../{{$picture -> file_path}}" alt = "{{$picture->file_path}}" class="picture-img">
+            </div>
 
-        <div>
-            @if ($picture -> usersWhoLike() -> where('user_id', Auth::id()) -> exists())
-                <a href="/pictures/{{$picture -> id}}/delete_like">いいね済</a>
-            @else
-                <a href="/pictures/{{$picture -> id}}/add_like">いいね</a>
-            @endif
-            <p>{{$picture->usersWhoLike->count()}}</p>
-        </div>
+            <div class="like">
+                @if ($picture -> usersWhoLike() -> where('user_id', Auth::id()) -> exists())
+                    <a href="/pictures/{{$picture -> id}}/delete_like" class="like-link">いいね解除</a>
+                @else
+                    <a href="/pictures/{{$picture -> id}}/add_like" class="like-link">いいね</a>
+                @endif
+                <p>いいね数：{{$picture->usersWhoLike->count()}}</p>
+            </div>
 
-        <div>
-            @if($picture -> user -> id === $login_user -> id)
-                <form action = "/pictures/{{$picture -> id}}/title" method = "post">
-                    @csrf
-                    <input type = "text" name = "title" value = "{{$picture -> title}}" placeholder = "タイトル編集">
-                    <input type = "hidden" name = "_method" value = "PUT">
-                    <input type = "submit" value = "更新">
-                </form>
-            @else
-                <p>{{$picture->title}}</p>
-            @endif
-        </div>
+            <div class="picturepage-title">
+                @if($picture -> user -> id === $login_user -> id)
+                    <form action = "/pictures/{{$picture -> id}}/title" method = "post" class="picturepage-form" >
+                        @csrf
+                        <input type = "text" name = "title" value = "{{$picture -> title}}" placeholder = "タイトル編集" id="title">
+                        <input type = "hidden" name = "_method" value = "PUT">
+                        <input type = "submit" value = "更新">
+                    </form>
+                @else
+                    <p>{{$picture->title}}</p>
+                @endif
+            </div>
 
-        <div class = "post_comment">
-            @if($picture->user->id === $login_user->id)
-                <form action = "/pictures/{{$picture -> id}}/post_comment" method = "post">
-                    @csrf
-                    <input type = "text" name = "post_comment" value = "{{$picture -> post_comment}}" placeholder = "投稿者コメント編集">
-                    <input type = "hidden" name = "_method" value = "PUT">
-                    <input type = "submit" value = "更新">
-                </form>
-            @else
-                <p>{{$picture->post_comment}}</p>
-            @endif
-        </div>
-
-        <div>
-            @foreach($tags as $tag)
+            <div class = "picturepage-post_comment">
                 @if($picture->user->id === $login_user->id)
-                    @if($picture->tag_count > 1)
-                        <form action = "/pictures/{{$picture -> id}}/tag/{{$tag -> id}}" method = "post">
+                    <form action = "/pictures/{{$picture -> id}}/post_comment" method = "post" class="picturepage-form">
+                        @csrf
+                        <textarea type = "text" name = "post_comment" placeholder = "投稿者コメント編集" rows="20" id="post_comment">{{$picture -> post_comment}}</textarea>
+                        <input type = "hidden" name = "_method" value = "PUT">
+                        <input type = "submit" value = "更新"> 
+                    </form>
+                @else
+                    <p>{{$picture->post_comment}}</p>
+                @endif
+            </div>
+
+            <div class = "picturepage-tag">
+                @foreach($tags as $tag)
+                    @if($picture->user->id === $login_user->id)
+                        @if($picture->tag_count > 1)
+                            <form action = "/pictures/{{$picture -> id}}/tag/{{$tag -> id}}" method = "post">
+                                @csrf
+                                <input type = "hidden" name = "_method" value = "DELETE">
+                                <button class = "btn btn-delete">×</button>
+                            </form>
+                        @endif
+                    @endif
+                    <a href = "/pictures?contents={{$tag -> name}}" class="picturepage-tagname">{{$tag -> name}}</a>
+                    
+                @endforeach
+            </div>
+                
+                @if($picture->user->id === $login_user->id)
+                    @if($picture->tag_count < 10)
+                        <form action = "/pictures/{{$picture -> id}}/tag" method = "post" class="picturepage-tagform">
+                            @csrf
+                            <textarea type = "text" placeholder = "タグの追加" name = "tags" rows="10"></textarea>
+                            <input type = "submit" value = "追加">
+                        </form>
+                    @endif
+                @endif
+
+            <div class="picturepage-user">
+                <a href = "/user/{{$picture -> user -> id}}">{{$picture->user->name}}</a>
+                @if ($picture -> user -> followers() -> where('follower_id', Auth::id()) -> exists())
+                    <a href="/user/{{$picture -> user -> id}}/delete_follow">フォロー中</a>
+                @else
+                    <a href="/user/{{$picture -> user -> id}}/add_follow">フォローする</a>
+                @endif
+            </div>
+
+            <div class="picturepage-commentform">
+                <form action = "/pictures/{{$picture -> id}}/comment" method = "post">
+                    @csrf
+                    <textarea type = "text" placeholder = "コメント追加" name = "comment" rows="10"></textarea>
+                    <input type = "submit" value = "追加">
+                </form>
+            </div>
+
+            <div class="picturepage-comments">
+                @foreach ($comments as $comment)
+                <div class="picturepage-comment">
+                    <a href = "/user/{{$comment -> user -> id}}">{{$comment -> user -> name}}</a>
+                    @if ($comment -> user -> id === $login_user -> id)
+                        <form action="/pictures/{{$picture -> id}}/comment/{{$comment -> id}}" method = "post">
+                            @csrf
+                            <input type = "hidden" name = "_method" value = "PUT">
+                            <textarea type = "text" name = "content" rows="10">{{$comment -> content}}</textarea>
+                            <input type = "submit" value = "編集">
+                        </form>
+                        <form action = "/pictures/{{$picture -> id}}/comment/{{$comment -> id}}" method = "post">
                             @csrf
                             <input type = "hidden" name = "_method" value = "DELETE">
                             <button class = "btn btn-delete">×</button>
                         </form>
-                    @endif
-                @endif
-                <a href = "/pictures?contents={{$tag -> name}}">{{$tag -> name}}</a>
-                
-            @endforeach
-            <!-- ここは後で投稿者しか編集できないようにする -->
-            @if($picture->user->id === $login_user->id)
-                @if($picture->tag_count < 10)
-                    <form action = "/pictures/{{$picture -> id}}/tag" method = "post">
-                        @csrf
-                        <input type = "text" placeholder = "タグの追加" name = "tags">
-                        <input type = "submit" value = "追加">
-                    </form>
-                @endif
-            @endif
-        </div>
-
-        <div>
-            <a href = "/user/{{$picture -> user -> id}}">{{$picture->user->name}}</a>
-            @if ($picture -> user -> followers() -> where('follower_id', Auth::id()) -> exists())
-                <a href="/user/{{$picture -> user -> id}}/delete_follow">フォロー中</a>
-            @else
-                <a href="/user/{{$picture -> user -> id}}/add_follow">フォローする</a>
-            @endif
-        </div>
-
-        <div>
-            <form action = "/pictures/{{$picture -> id}}/comment" method = "post">
-                @csrf
-                <input type = "text" placeholder = "コメント追加" name = "comment">
-                <input type = "submit" value = "追加">
-            </form>
-        </div>
-
-        <div>
-            @foreach ($comments as $comment)
-                <a href = "/user/{{$comment -> user -> id}}">{{$comment -> user -> name}}</a>
-                @if ($picture -> user -> id === $login_user -> id)
-                    <form action="/pictures/{{$picture -> id}}/comment/{{$comment -> id}}" method = "post">
-                        @csrf
-                        <input type = "hidden" name = "_method" value = "PUT">
-                        <input type = "text" value = "{{$comment -> content}}" name = "content">
-                        <input type = "submit" value = "編集">
-                    </form>
-                    <form action = "/pictures/{{$picture -> id}}/comment/{{$comment -> id}}" method = "post">
-                        @csrf
-                        <input type = "hidden" name = "_method" value = "DELETE">
-                        <button class = "btn btn-delete">×</button>
-                    </form>
-                @else
-                    @if ($login_user -> ngUsers() -> where('ng_user_id', $comment->user->id) -> exists())
-                    <a href="/user/{{$comment -> user -> id}}/delete_ng">このユーザーをNG解除</a>
                     @else
-                    <p>{{$comment -> content}}</p>
-                    <a href="/user/{{$comment -> user -> id}}/add_ng">このユーザーをNG</a>
+                        @if ($login_user -> ngUsers() -> where('ng_user_id', $comment->user->id) -> exists())
+                        <a href="/user/{{$comment -> user -> id}}/delete_ng">このユーザーをNG解除</a>
+                        @else
+                        <p>{{$comment -> content}}</p>
+                        <a href="/user/{{$comment -> user -> id}}/add_ng">このユーザーをNG</a>
+                        @endif
                     @endif
-                @endif
-                <p>{{$comment -> updated_at}}</p>
-            @endforeach
+                    <p class="picturepage-comment-date">{{$comment -> updated_at}}</p>
+                </div>
+                @endforeach
+            </div>
         </div>
         {{ $comments -> links('pagination::bootstrap-4') }}
     </div>

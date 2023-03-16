@@ -9,8 +9,28 @@ li {
 a {
     text-decoration: none;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 1.5vw;
     color: #000;
+}
+
+p {
+    word-wrap: break-word;
+    font-size: 1.5vw;
+}
+
+input[type="text"] {
+    width: 20vw;
+    font-size: 1.5vw;
+}
+
+input[type="submit"] , button {
+    width: 8vw;
+    font-size: 1vw;
+}
+
+textarea {
+    width: 30vw;
+    font-size: 1.5vw;
 }
 
 
@@ -26,7 +46,7 @@ a {
 }
 
 .header-logo {
-    font-size: 20px;
+    font-size: 3vw;
     margin-left: 5vw;
     font-weight: bold;
 }
@@ -49,14 +69,14 @@ a {
 .btn-logout {
     border: none;
     background-color: #eee;
-    font-size: 14px;
+    font-size: 1.5vw;
     font-weight: bold;
     cursor: pointer;
 }
 
 
 .footer {
-    padding: 10px 0;
+    padding: 3vh 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -66,7 +86,7 @@ a {
 }
 
 .footer-logo {
-    font-size: 12px;
+    font-size: 1vw;
     font-weight: bold;
 }
 
@@ -74,6 +94,7 @@ a {
 .container {
     width: 100vw;
 }
+
 
 
 .picture-form {
@@ -90,6 +111,7 @@ a {
 .picture-form > label {
     display: flex;
     justify-content: space-between;
+    font-size: 2vw;
 }
 
 .picture-form-file {
@@ -97,10 +119,11 @@ a {
 }
 
 .picture-form-btn {
-    width: 20%;
+    width: 10vw;
     margin-right: auto;
     margin-left: auto;
 }
+
 
 
 .search-result {
@@ -146,3 +169,72 @@ a {
 .page-item:not(:last-of-type) {
     margin-right: 0.5vw;
 }
+
+
+
+.picturepage-wrap {
+    width: 60vw;
+    margin: 20vh auto;
+
+}
+
+.picture-img {
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+.like {
+    margin-bottom: 20vh;
+}
+
+.like-link {
+    color: red;
+    font-size: 1.5vw;
+}
+
+.like p {
+    font-size: 2vw;
+}
+
+.picturepage-title, .picturepage-user {
+    margin-bottom: 10vh;
+}
+
+.picturepage-title p {
+    font-size: 3vw;
+}
+
+.picturepage-post_comment p {
+    font-size: 1.5vw;
+}
+
+.picturepage-post_comment , .picturepage-tagform , .picturepage-commentform, .picturepage-comment {
+    margin-bottom: 5vh;
+}
+
+.picturepage-tag {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.picturepage-tagname {
+    font-size: 1.5vw;
+    margin-right: 5vw;
+}
+
+.picturepage-user {
+    margin-top: 5vh;
+}
+
+.picturepage-comment {
+    background-color: #ddd;
+}
+
+.picturepage-comment-date {
+    width: 100%;
+    margin-top: 5vh;
+}
+
+
+
