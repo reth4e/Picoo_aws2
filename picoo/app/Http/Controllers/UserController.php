@@ -66,7 +66,7 @@ class UserController extends Controller
     public function follows () {
         $login_user = Auth::user();
         $follows = $login_user -> follows() -> paginate(20);
-
+        
         $param =[
             'login_user' => $login_user,
             'follows' => $follows,

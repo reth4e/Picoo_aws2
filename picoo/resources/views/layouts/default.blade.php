@@ -19,12 +19,8 @@
         </form>
 
         @if (auth()->user())
-            <!-- ここにイメージ画像 ログイン時のみ表示 -->
             <a href="/user/{{auth()->user()->id}}">マイページ</a>
 
-        
-        
-        
         @endif
         
         <div class="header-menu"  id="menu">
@@ -35,7 +31,6 @@
 
         <div class="dropdown" id = "dropdown">
             <!-- 以下はクリックで表示 -->
-            <!-- ログイン時のみ表示 -->
             @if (auth()->user())
             <div>
                 <button class="btn-notification btn" id="btn-notification">通知</button>
@@ -75,7 +70,6 @@
                 </li>
                 
             </ul>
-            <!-- 非ログイン時のみ表示 -->
             @else
             <ul>
                 <li class="header-link"><a href="/register">新規登録</a></li>
