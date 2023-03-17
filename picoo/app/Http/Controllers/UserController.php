@@ -14,16 +14,15 @@ class UserController extends Controller
         $user = User::find($user_id);
         $pictures = $user -> pictures() -> paginate(20);
         $param = [
-            'login_user' => $login_user,
             'user' => $user,
             'pictures' => $pictures,
             'search_tags' => NULL,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
         return view('userpage',$param);
     }
 
-    public function deleteMyPicture ($user_id, $picture_id) {
+    public function deleteMyPicture ($picture_id) {
         $picture = Picture::find($picture_id) -> delete();
         return back();
     }
@@ -55,10 +54,9 @@ class UserController extends Controller
         $favorites = $login_user -> favorites() -> paginate(20);
 
         $param =[
-            'login_user' => $login_user,
             'favorites' => $favorites,
             'search_tags' => NULL,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
         return view('favorites',$param);
     }
@@ -71,7 +69,7 @@ class UserController extends Controller
             'login_user' => $login_user,
             'follows' => $follows,
             'search_tags' => NULL,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
         return view('follows',$param);
     }
@@ -113,5 +111,15 @@ class UserController extends Controller
         auth() -> user() -> unreadNotifications -> markAsRead();
 
         return back();
+    }
+
+    public function notifications () {
+        $login_user = Auth::user();
+
+        $param =[
+            'search_tags' => NULL,
+            'notifications' => $login_user -> unreadNotifications() -> paginate(10),
+        ];
+        return view('notifications',$param);
     }
 }

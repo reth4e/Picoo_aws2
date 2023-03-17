@@ -33,6 +33,15 @@ textarea {
     font-size: 1.5vw;
 }
 
+.mg-b-3 {
+    margin-bottom: 3vh;
+}
+
+.mg-b-10 {
+    margin-bottom: 10vh;
+}
+
+
 
 
 .header {
@@ -329,3 +338,12 @@ textarea {
     margin-bottom: 20vh;
     margin-right: 10vw;
 }
+
+
+
+.notifications {
+    width: 60%;
+    margin: 20vh auto;
+    text-align: center;
+}
+

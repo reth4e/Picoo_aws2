@@ -39,7 +39,7 @@
                         </div>
                 </a>
                 @if(Auth::id() === $user -> id)
-                    <form action="/user/{{$picture->user->id}}/picture/{{$picture->id}}" method="post">
+                    <form action="/user/picture/{{$picture->id}}" method="post">
                         @csrf
                         <input type="hidden" name="_method" value="DELETE">
                         <button class="btn btn-delete">×</button>

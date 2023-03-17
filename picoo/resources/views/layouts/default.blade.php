@@ -39,21 +39,23 @@
                     <span>{{$notifications -> count()}}</span>
                 @endif
 
-                <div class="notifications" id="notifications">
+                <div class="header-notifications" id="notifications">
 
                     @if ($notifications -> count() > 0)
-                        <a href="/user/{{auth()->user()->id}}/notification">すべて既読にする</a>
+                        <a href="/user/notifications" style="display: block;">通知ページへ</a>
+                        <a href="/user/readall" style="color: red;">すべて既読にする</a>
                     @endif
 
                     @forelse ($notifications as $notification)
-                        <p>{{$notification->data['message']}}</p>
+                    <div class="header-notification mg-b-3">
+                        <a>{{$notification->data['message']}}</a>
                         <p>{{$notification->created_at}}</p>
-                        <a href="/user/{{auth()->user()->id}}/notification/{{$notification -> id}}">既読にする</a>
+                        <a href="/user/read/{{$notification -> id}}">既読にする</a>
+                    </div>
                     @empty
                         <p>お知らせはありません</p>
                     @endforelse
 
-                    {{ $notifications->links('pagination::bootstrap-4') }}
                 </div>
                 
             </div>
@@ -158,12 +160,10 @@
     .dropdown {
         display: none;
         width: 20vw;
-        padding: 0;
         list-style-type: none;
-        background-color: #eee;
     }
 
-    .notifications {
+    .header-notifications {
         display: none;
     }
 

@@ -21,7 +21,7 @@ class PictureController extends Controller
         $param = [
             'login_user' => $login_user,
             'search_tags' => NULL,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
 
         return view('index',$param);
@@ -33,13 +33,13 @@ class PictureController extends Controller
 
         $picture = new Picture;
 
-        $file_name = $request->file('image')->getClientOriginalName();
-        $request->file('image')->storeAs('public/pictures' , $file_name);
+        $file_name = $request -> file('image') -> getClientOriginalName();
+        $request -> file('image') -> storeAs('public/pictures' , $file_name);
         
         unset($picture['_token']);
 
 
-        $input_tag = $request->tags;
+        $input_tag = $request -> tags;
         $input_tag = str_replace('　', ' ', $input_tag);
         //複数の半角スペースを単一の半角スペースにする
         $input_tag = preg_replace('/\s+/', ' ', $input_tag);
@@ -51,7 +51,7 @@ class PictureController extends Controller
         }
 
         foreach($input_tag_to_array as $tag){
-            if(strlen($tag)>20){
+            if(strlen($tag) > 20){
                 return back();
             }
             $tag = Tag::firstOrCreate([
@@ -61,16 +61,16 @@ class PictureController extends Controller
         }
 
 
-        $picture->user_id = $request->user()->id;
-        $picture->file_path = 'storage/pictures/' . $file_name;
-        $picture->title = $request->title;
-        $picture->tag_count = count($input_tag_to_array);
-        $picture->post_comment = $request->post_comment;
-        $picture->favorites_count = 0;
-        $picture->save();
+        $picture -> user_id = $request -> user() -> id;
+        $picture -> file_path = 'storage/pictures/' . $file_name;
+        $picture -> title = $request -> title;
+        $picture -> tag_count = count($input_tag_to_array);
+        $picture -> post_comment = $request -> post_comment;
+        $picture -> favorites_count = 0;
+        $picture -> save();
 
 
-        $picture->tags()->syncWithoutDetaching($tag_ids);
+        $picture -> tags() -> syncWithoutDetaching($tag_ids);
 
 
         $followers = $login_user -> followers;
@@ -79,7 +79,7 @@ class PictureController extends Controller
         $param = [
             'login_user' => $login_user,
             'search_tags' => NULL,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
         return view('index',$param);
     }
@@ -88,7 +88,7 @@ class PictureController extends Controller
     public function searchPictures(Request $request) {
         $login_user = Auth::user();
 
-        $searched_tag = $request->contents;
+        $searched_tag = $request -> contents;
         $searched_tag = str_replace('　', ' ', $searched_tag);
         //複数の半角スペースを単一の半角スペースにする
         $searched_tag = preg_replace('/\s+/', ' ', $searched_tag);
@@ -119,7 +119,7 @@ class PictureController extends Controller
             'login_user' => $login_user,
             'pictures' => $search_result,
             'search_tags' => $searched_tag,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
         return view('pictures',$param);
     }
@@ -131,12 +131,11 @@ class PictureController extends Controller
         $comments = Comment::where('picture_id',$request -> picture_id) -> orderBy('id','desc') -> paginate(10);
 
         $param = [
-            'login_user' => $login_user,
             'picture' => $picture,
             'tags' => $tags,
             'comments' => $comments,
             'search_tags' => NULL,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
         return view('picturepage',$param);
     }
@@ -163,9 +162,8 @@ class PictureController extends Controller
             array_push($tag_ids, $tag -> id);
         }
 
-        $picture->tags() -> syncWithoutDetaching($tag_ids);
-        $tag_count = count($picture -> tags);
-        $picture -> tag_count = $tag_count;
+        $picture -> tags() -> syncWithoutDetaching($tag_ids);
+        $picture -> tag_count = count($picture -> tags);
         $picture -> save();
 
         return back();
@@ -173,9 +171,8 @@ class PictureController extends Controller
 
     public function deleteTag ($picture_id,$tag_id) {
         $picture = Picture::where('id',$picture_id) -> first();
-        $picture -> tags()->detach($tag_id);
-        $tag_count = count($picture -> tags);
-        $picture -> tag_count = $tag_count;
+        $picture -> tags() -> detach($tag_id);
+        $picture -> tag_count = count($picture -> tags);
         $picture -> save();
 
         return back();
@@ -208,7 +205,7 @@ class PictureController extends Controller
         return back();
     }
 
-    public function updateComment ($picture_id, $comment_id ,CommentRequest $request) {
+    public function updateComment ($comment_id ,CommentRequest $request) {
         $comment = Comment::where('id',$comment_id) -> first();
         $comment -> content = $request -> content;
         $comment -> save();
@@ -216,7 +213,7 @@ class PictureController extends Controller
         return back();
     }
 
-    public function deleteComment ($picture_id, $comment_id) {
+    public function deleteComment ($comment_id) {
         $comment = Comment::find($comment_id) -> delete();
         return back();
     }
@@ -251,7 +248,7 @@ class PictureController extends Controller
             'popular_pictures' => $popular_pictures,
             'popular_users' => $popular_users,
             'search_tags' => NULL,
-            'notifications' => $login_user -> unreadNotifications() -> paginate(5),
+            'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
         return view('popularpage',$param);
     }
