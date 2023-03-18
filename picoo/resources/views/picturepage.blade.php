@@ -83,7 +83,7 @@
             <div class="picturepage-commentform">
                 <form action = "/pictures/{{$picture -> id}}/comment" method = "post">
                     @csrf
-                    <textarea type = "text" placeholder = "コメント追加" name = "comment" rows="10"></textarea>
+                    <textarea type = "text" placeholder = "コメント追加" name = "comment" rows="10" required></textarea>
                     <input type = "submit" value = "追加">
                 </form>
             </div>
@@ -96,7 +96,7 @@
                         <form action="/pictures/update_comment/{{$comment -> id}}" method = "post">
                             @csrf
                             <input type = "hidden" name = "_method" value = "PUT">
-                            <textarea type = "text" name = "content" rows="10">{{$comment -> content}}</textarea>
+                            <textarea type = "text" name = "content" rows="10" required>{{$comment -> content}}</textarea>
                             <input type = "submit" value = "編集">
                         </form>
                         <form action = "/pictures/delete_comment/{{$comment -> id}}" method = "post">

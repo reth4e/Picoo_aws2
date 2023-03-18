@@ -14,7 +14,7 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware' => 'auth'],function() {
+Route::group(['middleware' => 'verified'],function() {
     Route::get('/', [PictureController::class, 'index']);
     Route::post('/', [PictureController::class, 'postPicture']);
     Route::post('/pictures/{picture_id}/tag',[PictureController::class, 'insertTag']);
@@ -45,11 +45,5 @@ Route::get('/pictures/{picture_id}',[PictureController::class, 'picturePage']);
 Route::get('/popular',[PictureController::class, 'popularPage']);
 
 Route::get('/user/{user_id}',[UserController::class, 'userPage']);
-
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
