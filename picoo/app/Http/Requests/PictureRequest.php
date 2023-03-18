@@ -28,4 +28,12 @@ class PictureRequest extends FormRequest
             'post_comment' => 'max:300',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'title.max' => 'タイトルは30文字以内にしてください',
+            'post_comment.max' => 'タイトルは300文字以内にしてください'
+        ];
+    }
 }

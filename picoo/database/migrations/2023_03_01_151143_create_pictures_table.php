@@ -20,6 +20,7 @@ class CreatePicturesTable extends Migration
             $table->string('title')->nullable();
             $table->tinyInteger('tag_count');
             $table->string('post_comment',400)->nullable();
+            $table->integer('favorites_count');
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
 

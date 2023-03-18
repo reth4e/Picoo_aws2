@@ -4,11 +4,11 @@
     <div class="container">
         <div class="notifications">
             @if ($notifications -> count() > 0)
-                <a href="/user/readall" style="display: block; color: red;" class="mg-b-10">すべて既読にする</a>
+                <a href="/user/readall" class="mg-b-10 block red">すべて既読にする</a>
             @endif
             @forelse ($notifications as $notification)
             <div class="notification mg-b-10">
-                <a>{{$notification->data['message']}}</a>
+                <a href="/pictures/{{$notification -> data['id']}}">{{$notification->data['message']}}</a>
                 <p>{{$notification->created_at}}</p>
                 <a href="/user/read/{{$notification -> id}}">既読にする</a>
             </div>

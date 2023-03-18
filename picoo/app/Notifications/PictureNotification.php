@@ -46,6 +46,7 @@ class PictureNotification extends Notification
     {
         return [
             'message' => $this -> picture -> user -> name.'さんが画像を投稿しました',
+            'id' => $this -> picture -> id,
         ];
     }
 }

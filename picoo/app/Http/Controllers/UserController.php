@@ -66,7 +66,6 @@ class UserController extends Controller
         $follows = $login_user -> follows() -> paginate(20);
         
         $param =[
-            'login_user' => $login_user,
             'follows' => $follows,
             'search_tags' => NULL,
             'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),

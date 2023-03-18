@@ -22,8 +22,8 @@ Route::group(['middleware' => 'auth'],function() {
     Route::put('/pictures/{picture_id}/title',[PictureController::class, 'changeTitle']);
     Route::put('/pictures/{picture_id}/post_comment',[PictureController::class, 'changePostComment']);
     Route::post('/pictures/{picture_id}/comment',[PictureController::class, 'addComment']);
-    Route::put('/pictures/comment/{comment_id}',[PictureController::class, 'updateComment']);
-    Route::delete('/pictures/comment/{comment_id}',[PictureController::class, 'deleteComment']);
+    Route::put('/pictures/update_comment/{comment_id}',[PictureController::class, 'updateComment']);
+    Route::delete('/pictures/delete_comment/{comment_id}',[PictureController::class, 'deleteComment']);
     Route::get('/pictures/{picture_id}/add_like', [PictureController::class, 'addLike']);
     Route::get('/pictures/{picture_id}/delete_like', [PictureController::class, 'deleteLike']);
     

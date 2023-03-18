@@ -42,13 +42,13 @@
                 <div class="header-notifications" id="notifications">
 
                     @if ($notifications -> count() > 0)
-                        <a href="/user/notifications" style="display: block;">通知ページへ</a>
-                        <a href="/user/readall" style="color: red;">すべて既読にする</a>
+                        <a href="/user/notifications" class="block">通知ページへ</a>
+                        <a href="/user/readall" class="mg-b-3 red block">すべて既読にする</a>
                     @endif
 
                     @forelse ($notifications as $notification)
                     <div class="header-notification mg-b-3">
-                        <a>{{$notification->data['message']}}</a>
+                        <a href="/pictures/{{$notification -> data['id']}}">{{$notification->data['message']}}</a>
                         <p>{{$notification->created_at}}</p>
                         <a href="/user/read/{{$notification -> id}}">既読にする</a>
                     </div>

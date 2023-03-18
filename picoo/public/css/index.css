@@ -143,6 +143,14 @@ textarea {
     margin-left: auto;
 }
 
+.red {
+    color: red;
+}
+
+.block {
+    display: block;
+}
+
 
 
 .search-result {

@@ -19,7 +19,6 @@ class PictureController extends Controller
     public function index(){
         $login_user = Auth::user();
         $param = [
-            'login_user' => $login_user,
             'search_tags' => NULL,
             'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
@@ -40,16 +39,13 @@ class PictureController extends Controller
 
 
         $input_tag = $request -> tags;
-        $input_tag = str_replace('　', ' ', $input_tag);
-        //複数の半角スペースを単一の半角スペースにする
-        $input_tag = preg_replace('/\s+/', ' ', $input_tag);
 
-        $tag_ids = [];
-        $input_tag_to_array = explode(' ', $input_tag);
+        $input_tag_to_array = Tag::getTagToArray($input_tag);
         if(count($input_tag_to_array)>10){
             return back();
         }
 
+        $tag_ids = [];
         foreach($input_tag_to_array as $tag){
             if(strlen($tag) > 20){
                 return back();
@@ -77,7 +73,6 @@ class PictureController extends Controller
         Notification::send($followers, new PictureNotification($picture));
 
         $param = [
-            'login_user' => $login_user,
             'search_tags' => NULL,
             'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
         ];
@@ -89,34 +84,16 @@ class PictureController extends Controller
         $login_user = Auth::user();
 
         $searched_tag = $request -> contents;
-        $searched_tag = str_replace('　', ' ', $searched_tag);
-        //複数の半角スペースを単一の半角スペースにする
-        $searched_tag = preg_replace('/\s+/', ' ', $searched_tag);
-        $searched_tag_array = explode(' ', $searched_tag);
+        $searched_tag_array = Tag::getTagToArray($searched_tag);
         
 
         $pictures = Picture::all();
-        $picture_ids = [];
-        foreach($pictures as $picture) {
-            $duplicates = 0;
-            $tags = $picture -> tags;
-            foreach($searched_tag_array as $value) {
-                foreach($tags as $tag) {
-                    if(strpos($tag,(string)$value) !== false) {
-                        $duplicates++;
-                        continue 2;
-                    }
-                }
-            }
-            if($duplicates === count($searched_tag_array)) {
-                array_push($picture_ids,$picture -> id);
-            }
-        }
+        
+        $picture_ids = Picture::getPictureIds($pictures, $searched_tag_array);
 
         $search_result = Picture::whereIn('id',$picture_ids) -> paginate(20);
         
         $param = [
-            'login_user' => $login_user,
             'pictures' => $search_result,
             'search_tags' => $searched_tag,
             'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
@@ -143,12 +120,9 @@ class PictureController extends Controller
     public function insertTag ($picture_id, Request $request) {
         $picture = Picture::where('id',$picture_id) -> first();
         $input_tag = $request -> tags;
-        $input_tag = str_replace('　', ' ', $input_tag);
-        //複数の半角スペースを単一の半角スペースにする
-        $input_tag = preg_replace('/\s+/', ' ', $input_tag);
 
         $tag_ids = [];
-        $input_tag_to_array = explode(' ', $input_tag);
+        $input_tag_to_array = Tag::getTagToArray($input_tag);
         if(count($input_tag_to_array) + $picture -> tag_count > 10){
             return back();
         }
@@ -169,7 +143,7 @@ class PictureController extends Controller
         return back();
     }
 
-    public function deleteTag ($picture_id,$tag_id) {
+    public function deleteTag ($picture_id, $tag_id) {
         $picture = Picture::where('id',$picture_id) -> first();
         $picture -> tags() -> detach($tag_id);
         $picture -> tag_count = count($picture -> tags);
@@ -244,7 +218,6 @@ class PictureController extends Controller
         $popular_users = User::orderBy('followers_count','DESC')->take(20)->get();
 
         $param =[
-            'login_user' => $login_user,
             'popular_pictures' => $popular_pictures,
             'popular_users' => $popular_users,
             'search_tags' => NULL,

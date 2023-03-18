@@ -77,6 +77,9 @@
                 @endif
             </div>
 
+            @error('content')
+                <p class="error_message red">{{$message}}</p>
+            @enderror
             <div class="picturepage-commentform">
                 <form action = "/pictures/{{$picture -> id}}/comment" method = "post">
                     @csrf
@@ -90,13 +93,13 @@
                 <div class="picturepage-comment">
                     <a href = "/user/{{$comment -> user -> id}}">{{$comment -> user -> name}}</a>
                     @if ($comment -> user -> id === Auth::id())
-                        <form action="/pictures/comment/{{$comment -> id}}" method = "post">
+                        <form action="/pictures/update_comment/{{$comment -> id}}" method = "post">
                             @csrf
                             <input type = "hidden" name = "_method" value = "PUT">
                             <textarea type = "text" name = "content" rows="10">{{$comment -> content}}</textarea>
                             <input type = "submit" value = "編集">
                         </form>
-                        <form action = "/pictures/comment/{{$comment -> id}}" method = "post">
+                        <form action = "/pictures/delete_comment/{{$comment -> id}}" method = "post">
                             @csrf
                             <input type = "hidden" name = "_method" value = "DELETE">
                             <button class = "btn btn-delete">×</button>

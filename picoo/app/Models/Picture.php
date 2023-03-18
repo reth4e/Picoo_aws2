@@ -35,4 +35,26 @@ class Picture extends Model
     {
         return $this->belongsToMany('App\Models\User', 'likes', 'picture_id', 'user_id');
     }
+
+    public static function getPictureIds ($pictures ,$searched_tag_array)
+    {
+        $picture_ids = [];
+        foreach($pictures as $picture) {
+            $duplicates = 0;
+            $tags = $picture -> tags;
+            foreach($searched_tag_array as $value) {
+                foreach($tags as $tag) {
+                    if(strpos($tag,(string)$value) !== false) {
+                        $duplicates++;
+                        continue 2;
+                    }
+                }
+            }
+            if($duplicates === count($searched_tag_array)) {
+                array_push($picture_ids,$picture -> id);
+            }
+        }
+
+        return $picture_ids;
+    }
 }
