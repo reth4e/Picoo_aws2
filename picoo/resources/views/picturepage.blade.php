@@ -62,7 +62,7 @@
                     @if($picture->tag_count < 10)
                         <form action = "/pictures/{{$picture -> id}}/tag" method = "post" class="picturepage-tagform">
                             @csrf
-                            <textarea type = "text" placeholder = "タグの追加" name = "tags" rows="10"></textarea>
+                            <textarea type = "text" placeholder = "タグの追加(1つにつき20文字まで)" name = "tags" rows="10"></textarea>
                             <input type = "submit" value = "追加">
                         </form>
                     @endif
@@ -83,7 +83,7 @@
             <div class="picturepage-commentform">
                 <form action = "/pictures/{{$picture -> id}}/comment" method = "post">
                     @csrf
-                    <textarea type = "text" placeholder = "コメント追加" name = "comment" rows="10" required></textarea>
+                    <textarea type = "text" placeholder = "コメント追加(1文字以上200文字以内)" name = "comment" rows="10" required></textarea>
                     <input type = "submit" value = "追加">
                 </form>
             </div>

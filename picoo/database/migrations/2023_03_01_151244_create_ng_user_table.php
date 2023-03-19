@@ -17,6 +17,8 @@ class CreateNgUserTable extends Migration
             $table->unsignedBigInteger('ng_user_id');
             $table->unsignedBigInteger('user_id');
 
+            $table->primary(['ng_user_id', 'user_id']);
+
             $table->foreign('ng_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

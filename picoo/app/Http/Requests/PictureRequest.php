@@ -24,6 +24,7 @@ class PictureRequest extends FormRequest
     public function rules()
     {
         return [
+            'file_name' => 'mimes:jpeg,png,jpg',
             'title' => 'max:30',
             'post_comment' => 'max:300',
         ];

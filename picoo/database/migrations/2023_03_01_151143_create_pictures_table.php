@@ -16,6 +16,7 @@ class CreatePicturesTable extends Migration
         Schema::create('pictures', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('file_name');
             $table->string('file_path');
             $table->string('title')->nullable();
             $table->tinyInteger('tag_count');

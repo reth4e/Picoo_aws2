@@ -58,6 +58,7 @@ class PictureController extends Controller
 
 
         $picture -> user_id = $request -> user() -> id;
+        $picture -> file_name = $file_name;
         $picture -> file_path = 'storage/pictures/' . $file_name;
         $picture -> title = $request -> title;
         $picture -> tag_count = count($input_tag_to_array);

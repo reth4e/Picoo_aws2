@@ -16,8 +16,8 @@ class CreateFollowerUserTable extends Migration
         Schema::create('follower_user', function (Blueprint $table) {
             $table->unsignedBigInteger('follower_id');
             $table->unsignedBigInteger('user_id');
-            $table->timestamp('now_last_uploaded')->nullable();
-            $table->timestamp('pre_last_uploaded')->nullable();
+
+            $table->primary(['follower_id', 'user_id']);
 
             $table->foreign('follower_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
