@@ -87,13 +87,19 @@ class PictureController extends Controller
         $searched_tag = $request -> contents;
         $searched_tag_array = Tag::getTagToArray($searched_tag);
         
-
         $pictures = Picture::all();
-        
+        if($searched_tag === NULL){
+            $param = [
+                'pictures' => Picture::paginate(20),
+                'search_tags' => $searched_tag,
+                'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
+            ];
+            return view('pictures',$param);
+        }
+
         $picture_ids = Picture::getPictureIds($pictures, $searched_tag_array);
 
         $search_result = Picture::whereIn('id',$picture_ids) -> paginate(20);
-        
         $param = [
             'pictures' => $search_result,
             'search_tags' => $searched_tag,

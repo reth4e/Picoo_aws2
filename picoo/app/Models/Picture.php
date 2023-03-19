@@ -43,10 +43,13 @@ class Picture extends Model
             $duplicates = 0;
             $tags = $picture -> tags;
             foreach($searched_tag_array as $value) {
-                foreach($tags as $tag) {
-                    if(strpos($tag,(string)$value) !== false) {
-                        $duplicates++;
-                        continue 2;
+                $required_tags = Tag::where('name','LIKE',"%{$value}%")->get();
+                foreach($required_tags as $required_tag) {
+                    foreach($tags as $tag) {
+                        if($tag -> name === $required_tag -> name) {
+                            $duplicates++;
+                            break;
+                        }
                     }
                 }
             }

@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
                 'email' => 'sample' .$cnt . '@example.com',
                 'password' => Hash::make('sample00'),
                 'followers_count' => 0,
-                'icon_path' => 'storage/icons'.$cnt .'.jpg',
+                'icon_path' => 'storage/icons/'.$cnt .'.jpg',
             ]);
         }
     }

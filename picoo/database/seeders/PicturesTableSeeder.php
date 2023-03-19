@@ -18,7 +18,7 @@ class PicturesTableSeeder extends Seeder
             Picture::create([
                 'user_id' => $cnt,
                 'file_name' => $cnt .'.jpg',
-                'file_path' => 'storage/pictures'.$cnt .'.jpg',
+                'file_path' => 'storage/pictures/'.$cnt .'.jpg',
                 'title' => 'sampletitle',
                 'tag_count' => 0,
                 'post_comment' => 'samplecomment.',
