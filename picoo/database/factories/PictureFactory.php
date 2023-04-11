@@ -22,7 +22,6 @@ class PictureFactory extends Factory
     {
         $file_name = $this->faker->imageUrl(600,480);
         return [
-            'user_id' => $this -> faker -> numberBetween(1,10),
             'file_name' => $file_name,
             'file_path' => 'storage/pictures/' . $file_name,
             'title' => Str::random(10),

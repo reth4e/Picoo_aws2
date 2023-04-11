@@ -13,6 +13,17 @@ class UserController extends Controller
         $login_user = Auth::user();
         $user = User::find($user_id);
         $pictures = $user -> pictures() -> paginate(20);
+        
+        if(!$login_user){
+            $param = [
+                'user' => $user,
+                'pictures' => $pictures,
+                'search_tags' => NULL,
+                'notifications' => NULL,
+            ];
+            return view('userpage',$param);
+        }
+
         $param = [
             'user' => $user,
             'pictures' => $pictures,
