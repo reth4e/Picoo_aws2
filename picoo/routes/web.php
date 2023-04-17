@@ -18,18 +18,18 @@ Route::group(['middleware' => 'verified'],function() {
     Route::get('/', [PictureController::class, 'index']);
     Route::post('/', [PictureController::class, 'postPicture']);
 
-    Route::post('/pictures/{picture_id}/tag',[PictureController::class, 'insertTag']);
-    Route::delete('/pictures/{picture_id}/tag/{tag_id}',[PictureController::class, 'deleteTag']);
+    Route::post('/pictures/{picture_id}/tag',[PictureController::class, 'insertTag'])->name('inserttag');
+    Route::delete('/pictures/{picture_id}/tag/{tag_id}',[PictureController::class, 'deleteTag'])->name('deletetag');
 
-    Route::put('/pictures/{picture_id}/title',[PictureController::class, 'changeTitle']);
-    Route::put('/pictures/{picture_id}/post_comment',[PictureController::class, 'changePostComment']);
+    Route::put('/pictures/{picture_id}/title',[PictureController::class, 'changeTitle'])->name('changetitle');
+    Route::put('/pictures/{picture_id}/post_comment',[PictureController::class, 'changePostComment'])->name('changepostcomment');
 
-    Route::post('/pictures/{picture_id}/comment',[PictureController::class, 'addComment']);
-    Route::put('/pictures/update_comment/{comment_id}',[PictureController::class, 'updateComment']);
-    Route::delete('/pictures/delete_comment/{comment_id}',[PictureController::class, 'deleteComment']);
+    Route::post('/pictures/{picture_id}/comment',[PictureController::class, 'addComment'])->name('addcomment');
+    Route::put('/pictures/update_comment/{comment_id}',[PictureController::class, 'updateComment'])->name('updatecomment');
+    Route::delete('/pictures/delete_comment/{comment_id}',[PictureController::class, 'deleteComment'])->name('deletecomment');
 
-    Route::get('/pictures/{picture_id}/add_like', [PictureController::class, 'addLike']);
-    Route::get('/pictures/{picture_id}/delete_like', [PictureController::class, 'deleteLike']);
+    Route::get('/pictures/{picture_id}/add_like', [PictureController::class, 'addLike'])->name('addlike');
+    Route::get('/pictures/{picture_id}/delete_like', [PictureController::class, 'deleteLike'])->name('deletelike');
     
 
     Route::put('/user/{user_id}',[UserController::class, 'changeIcon']);
@@ -54,11 +54,11 @@ Route::group(['middleware' => 'verified'],function() {
 
 Route::get('/pictures',[PictureController::class, 'searchPictures']);
 
-Route::get('/pictures/{picture_id}',[PictureController::class, 'picturePage']);
+Route::get('/pictures/{picture_id}',[PictureController::class, 'picturePage'])->name('picturepage');
 
 Route::get('/popular',[PictureController::class, 'popularPage']);
 
 
-Route::get('/user/{user_id}',[UserController::class, 'userPage']);
+Route::get('/user/{user_id}',[UserController::class, 'userPage'])->name('userpage');
 
 require __DIR__.'/auth.php';

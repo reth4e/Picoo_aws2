@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Picture;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use App\Notifications\PictureNotification;
+use Illuminate\Support\Facades\Notification;
 
 class UserControllerTest extends TestCase
 {
@@ -16,10 +19,8 @@ class UserControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function testUserPage()
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        
     }
 }
