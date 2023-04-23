@@ -23,10 +23,11 @@ class PictureControllerTest extends TestCase
      * @return void
      */
 
-    public function test()
+    public function test($user)
     {
-        //共通処理、picturesのレコードを返す、テスト項目は無し
-        $login_user = User::factory() -> create();
+        //共通処理、画像投稿処理、picturesのレコードを返す、テスト項目は無し
+        //テスト時に、このアクションにテスト項目がないことが原因でエラーが出ますが仕様です
+        $login_user = $user;
 
         $tags = 'tag1 tag2 tag3';
         $image = UploadedFile::fake() -> image('item.jpg');
@@ -46,17 +47,20 @@ class PictureControllerTest extends TestCase
     
     public function testIndex()
     {
-        //ログイン時のステータスコードの確認、テスト項目は１項目
+        //非ログイン時・ログイン時のステータスコードの確認、テスト項目は2項目
+        $response = $this -> get('/');
+        $response->assertStatus(302);
+
         $login_user = User::factory() -> create();
         $response = $this -> actingAs($login_user);
         $response = $this -> get('/');
-
         $response->assertStatus(200);
     }
 
     public function testPostPicture()
     {
         //画像、タグ、通知に関するテスト、計５項目
+        
         $another_user = User::factory() -> create();
         $login_user = User::factory() -> create();
         $another_user -> follows() -> syncWithoutDetaching($login_user->id);
@@ -66,18 +70,7 @@ class PictureControllerTest extends TestCase
 
         Notification::fake();
         
-        $image = UploadedFile::fake() -> image('item.jpg');
-        $tags = 'tag1 tag2 tag3';
-        $data = [
-            'image' => $image,
-            'title' => 'title',
-            'post_comment' => 'post_comment',
-            'tags' => $tags,
-        ];
-
-        $response = $this -> actingAs($login_user);
-        $response = $this -> post('/',$data);
-
+        $picture = $this -> test($login_user);
         $this -> assertDatabaseHas('pictures', [
             'file_name' => 'item.jpg',
             'title' => 'title',
@@ -109,16 +102,7 @@ class PictureControllerTest extends TestCase
         //画像一覧ページで投稿された画像が存在しているかをテスト、１項目
         $login_user = User::factory() -> create();
 
-        $tags = 'tag1 tag2 tag3';
-        $image = UploadedFile::fake() -> image('item.jpg');
-        $data = [
-            'image' => $image,
-            'title' => 'title',
-            'post_comment' => 'post_comment',
-            'tags' => $tags,
-        ];
-        $response = $this -> actingAs($login_user);
-        $response = $this -> post('/',$data);
+        $picture = $this -> test($login_user);
         
         $response = $this -> get('/pictures',['contents' => 'tag1 tag2 tag3'])->assertSee('item.jpg');
 
@@ -128,19 +112,7 @@ class PictureControllerTest extends TestCase
     {
         //まず画像を投稿し、その後画像個別ページ内で画像が存在するかを確かめる、１項目
         $login_user = User::factory() -> create();
-
-        $tags = 'tag1 tag2 tag3';
-        $image = UploadedFile::fake() -> image('item.jpg');
-        $data = [
-            'image' => $image,
-            'title' => 'title',
-            'post_comment' => 'post_comment',
-            'tags' => $tags,
-        ];
-        $response = $this -> actingAs($login_user);
-        $response = $this -> post('/',$data);
-        
-        $picture = Picture::where('title','title') -> first();
+        $picture = $this -> test($login_user);
         $response = $this->get(route('picturepage', [
             'picture_id' => $picture->id,
         ])) -> assertSee('item.jpg');
@@ -151,18 +123,7 @@ class PictureControllerTest extends TestCase
         //タグがデータベースに存在するか、画像ページに表示されているかを確認、4項目
         $login_user = User::factory() -> create();
 
-        $tags = 'tag1 tag2 tag3';
-        $image = UploadedFile::fake() -> image('item.jpg');
-        $data = [
-            'image' => $image,
-            'title' => 'title',
-            'post_comment' => 'post_comment',
-            'tags' => $tags,
-        ];
-        $response = $this -> actingAs($login_user);
-        $response = $this -> post('/',$data);
-        
-        $picture = Picture::where('title','title') -> first();
+        $picture = $this -> test($login_user);
         $response = $this -> post(route('inserttag',[
             'picture_id' => $picture->id,
             'tags' => 'tag4 tag5',
@@ -190,18 +151,7 @@ class PictureControllerTest extends TestCase
         //画像とタグの結びつきがなくなるか確認、１項目
         $login_user = User::factory() -> create();
 
-        $tags = 'tag1 tag2 tag3';
-        $image = UploadedFile::fake() -> image('item.jpg');
-        $data = [
-            'image' => $image,
-            'title' => 'title',
-            'post_comment' => 'post_comment',
-            'tags' => $tags,
-        ];
-        $response = $this -> actingAs($login_user);
-        $response = $this -> post('/',$data);
-        
-        $picture = Picture::where('title','title') -> first();
+        $picture = $this -> test($login_user);
         $tag_id = Tag::where('name','tag3') -> first() ->id;
         $response = $this -> delete(route('deletetag',[
             'picture_id' => $picture->id,
@@ -218,7 +168,7 @@ class PictureControllerTest extends TestCase
         //タイトルの変更に関するデータベースと画像個別ページの確認、２項目
         $login_user = User::factory() -> create();
 
-        $picture = $this -> test();
+        $picture = $this -> test($login_user);
 
         $response = $this -> actingAs($login_user);
         $response = $this -> put(route('changetitle',[
@@ -238,7 +188,7 @@ class PictureControllerTest extends TestCase
     public function testChangePostComment ()
     {
         $login_user = User::factory() -> create();
-        $picture = $this -> test();
+        $picture = $this -> test($login_user);
 
         $response = $this -> actingAs($login_user);
         $response = $this -> put(route('changepostcomment',[
@@ -258,7 +208,7 @@ class PictureControllerTest extends TestCase
     public function testAddComment ()
     {
         $login_user = User::factory() -> create();
-        $picture = $this -> test();
+        $picture = $this -> test($login_user);
 
         $response = $this -> actingAs($login_user);
         $response = $this -> post(route('addcomment',[
@@ -278,7 +228,7 @@ class PictureControllerTest extends TestCase
     public function testUpdateComment ()
     {
         $login_user = User::factory() -> create();
-        $picture = $this -> test();
+        $picture = $this -> test($login_user);
 
         $response = $this -> actingAs($login_user);
         $response = $this -> post(route('addcomment',[
@@ -305,8 +255,9 @@ class PictureControllerTest extends TestCase
 
     public function testDeleteComment ()
     {
+        //コメントを投稿した後、削除する、コメントが残っていないことを確認、２項目
         $login_user = User::factory() -> create();
-        $picture = $this -> test();
+        $picture = $this -> test($login_user);
 
         $response = $this -> actingAs($login_user);
         $response = $this -> post(route('addcomment',[
@@ -332,7 +283,7 @@ class PictureControllerTest extends TestCase
     public function testAddLike ()
     {
         $login_user = User::factory() -> create();
-        $picture = $this -> test();
+        $picture = $this -> test($login_user);
 
         $response = $this -> actingAs($login_user);
         $response = $this -> get(route('addlike',[
@@ -343,12 +294,17 @@ class PictureControllerTest extends TestCase
             'id' => $picture -> id,
             'favorites_count' => 1
         ]);
+
+        $this -> assertDatabaseHas('likes', [
+            'picture_id' => $picture -> id,
+            'user_id' => $login_user -> id
+        ]);
     }
 
     public function testDeleteLike ()
     {
         $login_user = User::factory() -> create();
-        $picture = $this -> test();
+        $picture = $this -> test($login_user);
 
         $response = $this -> actingAs($login_user);
         $response = $this -> get(route('addlike',[
@@ -363,8 +319,10 @@ class PictureControllerTest extends TestCase
             'id' => $picture -> id,
             'favorites_count' => 0
         ]);
-    }
 
-    public function testPopularPage ()
-    {}
+        $this -> assertDatabaseMissing('likes', [
+            'picture_id' => $picture -> id,
+            'user_id' => $login_user -> id
+        ]);
+    }
 }

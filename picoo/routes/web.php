@@ -32,23 +32,23 @@ Route::group(['middleware' => 'verified'],function() {
     Route::get('/pictures/{picture_id}/delete_like', [PictureController::class, 'deleteLike'])->name('deletelike');
     
 
-    Route::put('/user/{user_id}',[UserController::class, 'changeIcon']);
+    Route::put('/user/{user_id}',[UserController::class, 'changeIcon'])->name('changeicon');
 
-    Route::delete('/user/picture/{picture_id}',[UserController::class, 'deleteMyPicture']);
+    Route::delete('/user/picture/{picture_id}',[UserController::class, 'deleteMyPicture'])->name('deletemypicture');
 
-    Route::get('/user/{user_id}/add_follow',[UserController::class, 'addFollow']);
-    Route::get('/user/{user_id}/delete_follow',[UserController::class, 'deleteFollow']);
+    Route::get('/user/{user_id}/add_follow',[UserController::class, 'addFollow'])->name('addfollow');
+    Route::get('/user/{user_id}/delete_follow',[UserController::class, 'deleteFollow'])->name('deletefollow');
 
     Route::get('/user/favorites',[UserController::class, 'favorites']);
 
     Route::get('/user/follows',[UserController::class, 'follows']);
 
-    Route::get('/user/{user_id}/add_ng',[UserController::class, 'addNg']);
-    Route::get('/user/{user_id}/delete_ng',[UserController::class, 'deleteNg']);
+    Route::get('/user/{user_id}/add_ng',[UserController::class, 'addNg'])->name('addng');
+    Route::get('/user/{user_id}/delete_ng',[UserController::class, 'deleteNg'])->name('deleteng');
 
     Route::get('/user/notifications',[UserController::class, 'notifications']);
     Route::get('/user/readall',[UserController::class, 'readAll']);
-    Route::get('/user/read/{notification_id}',[UserController::class, 'read']);
+    Route::get('/user/read/{notification_id}',[UserController::class, 'read'])->name('read');
 });
 
 
