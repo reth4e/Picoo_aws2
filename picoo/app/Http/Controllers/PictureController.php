@@ -82,6 +82,7 @@ class PictureController extends Controller
 
 
     public function searchPictures(Request $request) {
+        //このアクションとdefaultの改正で日付ソート（このメッセージは消去して）
         $login_user = Auth::user();
 
         $searched_tag = $request -> contents;
@@ -90,9 +91,21 @@ class PictureController extends Controller
         $pictures = Picture::all();
         $picture_ids = Picture::getPictureIds($pictures, $searched_tag_array);
 
-        $search_result = Picture::whereIn('id',$picture_ids) -> paginate(20);
+        if($request -> dateorder === 'new'){
+            $search_result = Picture::whereIn('id',$picture_ids) -> orderBy('created_at','DESC') -> paginate(20);
+        } else {
+            $search_result = Picture::whereIn('id',$picture_ids) -> paginate(20);
+        }
 
         if($login_user !== NULL && $searched_tag === NULL){
+            if($request -> dateorder === 'new') {
+                $param = [
+                    'pictures' => Picture::orderBy('created_at','DESC') -> paginate(20),
+                    'search_tags' => $searched_tag,
+                    'notifications' => $login_user -> unreadNotifications() -> orderBy('created_at','DESC') -> take(5) -> get(),
+                ];
+                return view('pictures',$param);
+            }
             $param = [
                 'pictures' => Picture::paginate(20),
                 'search_tags' => $searched_tag,
@@ -109,6 +122,14 @@ class PictureController extends Controller
             return view('pictures',$param);
         }
         if(!$login_user && !$searched_tag){
+            if($request -> dateorder === 'new') {
+                $param = [
+                    'pictures' => Picture::orderBy('created_at','DESC') -> paginate(20),
+                    'search_tags' => $searched_tag,
+                    'notifications' => NULL,
+                ];
+                return view('pictures',$param);
+            }
             $param = [
                 'pictures' => Picture::paginate(20),
                 'search_tags' => $searched_tag,

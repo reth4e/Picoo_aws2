@@ -14,7 +14,13 @@
         <p class="header-logo">Picoo</p>
         
         <form action="/pictures?contents={{$search_tags}}" method="get" class="header-form">
-            <input class="search" type="text" name="contents" placeholder="タグ名検索"  />
+            <input class="search" type="text" name="contents" placeholder="タグ名検索" value ="{{$search_tags}}" />
+            <label>新しい順
+                <input type="radio" name="dateorder" value="new">
+            </label>
+            <label>古い順
+                <input type="radio" name="dateorder" value="old">
+            </label>
             <input class="btn search-btn" type="submit" value="検索">
         </form>
 
