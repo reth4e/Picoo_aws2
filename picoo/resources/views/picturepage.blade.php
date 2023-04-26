@@ -113,7 +113,7 @@
                                 <button class = "btn btn-delete">×</button>
                             </form>
                         @else
-                            @if (auth() -> user)
+                            @if (Auth::id())
                                 @if (auth() -> user() -> ngUsers() -> where('ng_user_id', $comment->user->id) -> exists())
                                 <a href="/user/{{$comment -> user -> id}}/delete_ng">このユーザーをNG解除</a>
                                 @else

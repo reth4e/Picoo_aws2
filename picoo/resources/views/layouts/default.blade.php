@@ -23,68 +23,61 @@
             </label>
             <input class="btn search-btn" type="submit" value="検索">
         </form>
-
-        @if (auth()->user())
-            <a href="/user/{{auth()->user()->id}}">マイページ</a>
-
-        @endif
         
-        <div class="header-menu"  id="menu">
-            <span class="menu_line-top"></span>
-            <span class="menu_line-middle"></span>
-            <span class="menu_line-bottom"></span>
-        </div>
-
-        <div class="dropdown" id = "dropdown">
+        <nav class="header-nav">
+            <p class="header-menu" id="menu">メニュー</p>
             <!-- 以下はクリックで表示 -->
-            @if (auth()->user())
-            <div>
-                <button class="btn-notification btn" id="btn-notification">通知</button>
-
-                @if ($notifications -> count() > 0)
-                    <span>{{$notifications -> count()}}</span>
-                @endif
-
-                <div class="header-notifications" id="notifications">
+            <div class="dropdown" id = "dropdown">
+                @if (auth()->user())
+                <div class="notification-block">
+                    <button class="btn-notification btn" id="btn-notification">通知</button>
 
                     @if ($notifications -> count() > 0)
-                        <a href="/user/notifications" class="block">通知ページへ</a>
-                        <a href="/user/readall" class="mg-b-3 red block">すべて既読にする</a>
+                        <span>{{$notifications -> count()}}</span>
                     @endif
 
-                    @forelse ($notifications as $notification)
-                    <div class="header-notification mg-b-3">
-                        <a href="/pictures/{{$notification -> data['id']}}">{{$notification->data['message']}}</a>
-                        <p>{{$notification->created_at}}</p>
-                        <a href="/user/read/{{$notification -> id}}">既読にする</a>
-                    </div>
-                    @empty
-                        <p>お知らせはありません</p>
-                    @endforelse
+                    <div class="header-notifications" id="notifications">
 
+                        @if ($notifications -> count() > 0)
+                            <a href="/user/notifications" class="block">通知ページへ</a>
+                            <a href="/user/readall" class="mg-b-3 red block">すべて既読にする</a>
+                        @endif
+
+                        @forelse ($notifications as $notification)
+                        <div class="header-notification mg-b-3">
+                            <a href="/pictures/{{$notification -> data['id']}}">{{$notification->data['message']}}</a>
+                            <p>{{$notification->created_at}}</p>
+                            <a href="/user/read/{{$notification -> id}}">既読にする</a>
+                        </div>
+                        @empty
+                            <p>お知らせはありません</p>
+                        @endforelse
+
+                    </div>
+                    
                 </div>
-                
+                <ul>
+                    <li class="header-link"><a href="/user/{{auth()->user()->id}}">マイページ</a></li>
+                    <li class="header-link"><a href="/">画像投稿</a></li>
+                    <li class="header-link"><a href="/user/follows">フォローユーザー</a></li>
+                    <li class="header-link"><a href="/user/favorites">お気に入り画像</a></li>
+                    <li class="header-link"><a href="/popular">人気ユーザー・画像</a></li>
+                    <li class="header-link">
+                        <form action="/logout" method="post" class="form-logout">
+                        @csrf
+                        <input class="btn btn-logout" type="submit" value="ログアウト">
+                        </form>
+                    </li>
+                    
+                </ul>
+                @else
+                <ul>
+                    <li class="header-link"><a href="/register">新規登録</a></li>
+                    <li class="header-link"><a href="/login">ログイン</a></li>
+                </ul>
+                @endif
             </div>
-            <ul>
-                <li class="header-link"><a href="/">画像投稿</a></li>
-                <li class="header-link"><a href="/user/follows">フォローユーザー</a></li>
-                <li class="header-link"><a href="/user/favorites">お気に入り画像</a></li>
-                <li class="header-link"><a href="/popular">人気ユーザー・画像</a></li>
-                <li class="header-link">
-                    <form action="/logout" method="post" class="form-logout">
-                    @csrf
-                    <input class="btn btn-logout" type="submit" value="ログアウト">
-                    </form>
-                </li>
-                
-            </ul>
-            @else
-            <ul>
-                <li class="header-link"><a href="/register">新規登録</a></li>
-                <li class="header-link"><a href="/login">ログイン</a></li>
-            </ul>
-            @endif
-        </div>
+        </nav>
     </header>
 
     <main>
@@ -116,51 +109,9 @@
 <style>
 
     .header-menu {
-        display: inline-block;
-        width: 36px;
-        height: 32px;
+        width: 6vw;
         cursor: pointer;
-        position: relative;
-        left: 20px;
-        top: 20px;
         margin-right: 5vw;
-    }
-
-    .menu_line-top,
-    .menu_line-middle,
-    .menu_line-bottom {
-        display: inline-block;
-        width: 100%;
-        height: 4px;
-        background-color: #000;
-        position: absolute;
-        transition: 0.5s;
-    }
-
-    .menu_line-top {
-        top: 0;
-    }
-
-    .menu_line-middle {
-        top: 14px;
-    }
-
-    .menu_line-bottom {
-        bottom: 0;
-    }
-
-    .header-menu.open span:nth-of-type(1) {
-        top: 14px;
-        transform: rotate(45deg);
-    }
-
-    .header-menu.open span:nth-of-type(2) {
-        opacity: 0;
-    }
-
-    .header-menu.open span:nth-of-type(3) {
-        top: 14px;
-        transform: rotate(-45deg);
     }
 
     .dropdown {
