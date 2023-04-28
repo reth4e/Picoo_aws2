@@ -9,7 +9,7 @@
                 </p>
             @else
                 <div class="picturepage-picture">
-                    <img src = "../../{{$picture -> file_path}}" alt = "{{$picture->file_path}}" class="picture-img">
+                    <img src = "https://picoo-s3.s3.ap-northeast-1.amazonaws.com/pictures/{{$picture -> file_name}}" alt = "{{$picture->file_path}}" class="picture-img">
                 </div>
 
                 <div class="like">

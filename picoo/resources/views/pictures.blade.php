@@ -8,7 +8,7 @@
             <a href="/pictures/{{$picture->id}}">
                 <div class="searched-picture-card card">
                     <div class="searched-picture picture">
-                        <img src="{{$picture->file_path}}" alt="" class="searched-picture-img img"/>
+                        <img src="https://picoo-s3.s3.ap-northeast-1.amazonaws.com/pictures/{{$picture -> file_name}}" alt="" class="searched-picture-img img"/>
                     </div>
                     <div>
                         <p>{{$picture->title}}</p>

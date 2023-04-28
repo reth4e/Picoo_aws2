@@ -7,14 +7,14 @@
         <div class="follow-user">
             <a href="/user/{{$follow -> id}}" class="follow-user-name">{{$follow -> name}}</a>
             <div class="follow-icon">
-                <img src="../../{{$follow -> icon_path}}" alt="" class="follow-icon-img">
+                <img src="{{$follow -> icon_path}}" alt="" class="follow-icon-img">
             </div>
             
             <div class="follow-user-pictures pictures jc-sb">
             @foreach ($follow -> pictures() -> orderBy('created_at','DESC') -> take(5) -> get() as $picture)
                 <div class="follow-user-picture picture">
                     <a href="/pictures/{{$picture -> id}}">
-                        <img src="../../{{$picture -> file_path}}" alt="" class="follow-user-picture-img img">
+                        <img src="https://picoo-s3.s3.ap-northeast-1.amazonaws.com/pictures/{{$picture -> file_name}}" alt="" class="follow-user-picture-img img">
                     </a>
                 </div>
             @endforeach

@@ -7,7 +7,7 @@
             <div class="popular-picture picture">
                 <span>{{$loop -> index + 1}}</span>
                 <a href="/pictures/{{$popular_picture -> id}}">
-                    <img src="../../{{$popular_picture -> file_path}}" alt="" class="popular-picture-img img">
+                    <img src="https://picoo-s3.s3.ap-northeast-1.amazonaws.com/pictures/{{$popular_picture -> file_name}}" alt="" class="popular-picture-img img">
                 </a>
             </div>
             @endforeach
@@ -18,7 +18,7 @@
                 <span>{{$loop -> index + 1}}</span>
                 <a href="/user/{{$popular_user -> id}}">{{$popular_user -> name}}</a>
                 <div class="popularpage-icon">
-                    <img src="../../{{$popular_user -> icon_path}}" alt="" class="popularpage-icon-img">
+                    <img src="{{$popular_user -> icon_path}}" alt="" class="popularpage-icon-img">
                 </div>
             </div>
             @endforeach

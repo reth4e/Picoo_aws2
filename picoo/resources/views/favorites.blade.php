@@ -10,7 +10,7 @@
             <a href="/pictures/{{$favorite -> id}}">
                 <div class="favorite-picture-card card">
                     <div class="favorite-picture picture">
-                        <img src="../../{{$favorite -> file_path}}" alt="" class="favorite-picture-img img">
+                        <img src="https://picoo-s3.s3.ap-northeast-1.amazonaws.com/pictures/{{$favorite -> file_name}}" alt="" class="favorite-picture-img img">
                     </div>
                     <div>
                         <p>{{$favorite->title}}</p>

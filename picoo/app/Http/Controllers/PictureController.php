@@ -33,7 +33,7 @@ class PictureController extends Controller
         $picture = new Picture;
 
         $file_name = $request -> file('image') -> getClientOriginalName();
-        $request -> file('image') -> storeAs('public/pictures' , $file_name);
+        $request -> file('image') -> storeAs('pictures' , $file_name , 's3');
         
         unset($picture['_token']);
 

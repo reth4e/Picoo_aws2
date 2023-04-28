@@ -12,7 +12,7 @@
                 <p>フォロワー: {{$user -> followers -> count()}}</p>
             </div>
             <div class="userpage-icon">
-                <img src = "../../{{$user -> icon_path}}" alt = "{{$user -> icon_path}}" class="userpage-icon-img">
+                <img src = "{{$user -> icon_path}}" alt = "{{$user -> icon_path}}" class="userpage-icon-img">
             </div>
 
             @if (Auth::id() === $user -> id)
@@ -32,7 +32,7 @@
             <div class="userpage-picture-card card">
                 <a href="/pictures/{{$picture->id}}">
                         <div class="picture userpage-picture">
-                            <img src="../../{{$picture->file_path}}" alt="" class="userpage-picture-img img">
+                            <img src="https://picoo-s3.s3.ap-northeast-1.amazonaws.com/pictures/{{$picture->file_name}}" alt="" class="userpage-picture-img img">
                         </div>
                         <div>
                             <p>{{$picture->title}}</p>
