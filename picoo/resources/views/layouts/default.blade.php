@@ -108,18 +108,6 @@
 
 <style>
 
-    .header-menu {
-        width: 6vw;
-        cursor: pointer;
-        margin-right: 5vw;
-    }
-
-    .dropdown {
-        display: none;
-        width: 20vw;
-        list-style-type: none;
-    }
-
     .header-notifications {
         display: none;
     }

@@ -12,7 +12,7 @@
             
             <div class="follow-user-pictures pictures jc-sb">
             @foreach ($follow -> pictures() -> orderBy('created_at','DESC') -> take(5) -> get() as $picture)
-                <div class="follow-user-picture">
+                <div class="follow-user-picture picture">
                     <a href="/pictures/{{$picture -> id}}">
                         <img src="../../{{$picture -> file_path}}" alt="" class="follow-user-picture-img img">
                     </a>
