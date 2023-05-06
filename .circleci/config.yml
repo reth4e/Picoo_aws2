@@ -16,7 +16,7 @@ jobs:
             - add_ssh_keys:
                 fingerprints:
                   - "${KEY_FINGERPRINT}"
-            - run: ssh ${USER_NAME}@${HOST_NAME} 'cd /var/www/Picoo_T.M && git pull'
+            - run: ssh ${USER_NAME}@${HOST_NAME} 'cd /var/www/Picoo_T.M && sudo git pull'
 
 workflows:
     version: 2
