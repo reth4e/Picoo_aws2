@@ -15,9 +15,7 @@ jobs:
             - checkout
             - add_ssh_keys:
                 fingerprints:
-                  # CircleCI上でSSHキー登録を行った際に作成されるfingerprintsを記入！！
                   - 9f:ec:85:68:11:4c:06:89:2b:89:46:44:67:b3:fa:f6
-            #この箇所の［EC2上のプロジェクトパス］を自身のパスに書き換え！！
             - run: ssh ${USER_NAME}@${HOST_NAME} 'cd /var/www/Picoo_T.M && git pull'
 
 workflows:
